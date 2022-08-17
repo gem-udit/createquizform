@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { storage, db } from "../firebase/config";
 import { collection, addDoc } from "firebase/firestore";
 import { Picker } from "@react-native-picker/picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   View,
   Text,
@@ -11,12 +12,40 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Platform,
+  Button,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import QuizDetails from "./components/QuizDetails";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 const CreateQuizForm = () => {
+  const [isPickerShowFromDate, setIsPickerShowFromDate] = useState(false);
+  const [isPickerShowToDate, setIsPickerShowToDate] = useState(false);
+  const [fromDate, setFromDate] = useState(new Date(Date.now()));
+  const [toDate, setToDate] = useState(new Date(Date.now()));
+
+  const showPickerFromDate = () => {
+    setIsPickerShowFromDate(true);
+  };
+  const showPickerToDate = () => {
+    setIsPickerShowToDate(true);
+  };
+
+  const onChangeFromDate = (event: any, value: Date) => {
+    setFromDate(value);
+    if (Platform.OS === "android") {
+      setIsPickerShowFromDate(false);
+    }
+  };
+  const onChangeToDate = (event: any, value: Date) => {
+    setToDate(value);
+    if (Platform.OS === "android") {
+      setIsPickerShowToDate(false);
+    }
+  };
+
   const categories = [
     {
       text: "Sports",
@@ -48,6 +77,7 @@ const CreateQuizForm = () => {
       category: "",
       quizName: "",
       Time: 0,
+      TimePeriod: {},
       pointsPerQuestion: 0,
       logoUrl: "",
     },
@@ -259,6 +289,10 @@ const CreateQuizForm = () => {
           pointsPerQuestion: Number(quizDetails.pointsPerQuestion),
           logoUrl: quizDetails.logoUrl,
           category: quizDetails.category,
+          TimePeriod: {
+            start: fromDate,
+            end: toDate,
+          },
         },
       });
       setQuizDetails({
@@ -484,6 +518,58 @@ const CreateQuizForm = () => {
                     <Text style={styles.incorrectFeedback}>
                       {quizDetailsErrors.category}
                     </Text>
+                  )}
+                  <Text>Enter Quiz Time Period</Text>
+                  <View style={styles.pickedDateContainer}>
+                    <Text style={styles.pickedDate}>
+                      {fromDate.toDateString()}
+                    </Text>
+                  </View>
+                  {!isPickerShowFromDate && (
+                    <View style={styles.datebtnContainer}>
+                      <Button
+                        title="From Date"
+                        color="purple"
+                        onPress={showPickerFromDate}
+                      />
+                    </View>
+                  )}
+
+                  {/* The date picker */}
+                  {isPickerShowFromDate && (
+                    <DateTimePicker
+                      value={fromDate}
+                      mode={"date"}
+                      display={Platform.OS === "ios" ? "spinner" : "default"}
+                      is24Hour={true}
+                      onChange={onChangeFromDate}
+                      style={styles.datePicker}
+                    />
+                  )}
+                  <View style={styles.pickedDateContainer}>
+                    <Text style={styles.pickedDate}>
+                      {toDate.toDateString()}
+                    </Text>
+                  </View>
+                  {!isPickerShowToDate && (
+                    <View style={styles.datebtnContainer}>
+                      <Button
+                        title="To Date"
+                        color="purple"
+                        onPress={showPickerToDate}
+                      />
+                    </View>
+                  )}
+
+                  {isPickerShowToDate && (
+                    <DateTimePicker
+                      value={toDate}
+                      mode={"date"}
+                      display={Platform.OS === "ios" ? "spinner" : "default"}
+                      is24Hour={true}
+                      onChange={onChangeToDate}
+                      style={styles.datePicker}
+                    />
                   )}
                   <Text>Enter Quiz Duration</Text>
                   <TextInput
@@ -825,6 +911,26 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 40,
     fontSize: 14,
+  },
+
+  pickedDateContainer: {
+    padding: 20,
+    backgroundColor: "#eee",
+    borderRadius: 10,
+  },
+  pickedDate: {
+    fontSize: 18,
+    color: "black",
+  },
+  datebtnContainer: {
+    padding: 30,
+  },
+  datePicker: {
+    width: 320,
+    height: 260,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
   },
 });
 export default CreateQuizForm;
