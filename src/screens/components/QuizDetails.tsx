@@ -25,6 +25,10 @@ const QuizDetails = ({ quiz }) => {
             {quiz.Basic_Details.quizName}
           </Text>
         </View>
+        {/* <View style={styles.basicDetailRow}>
+          <Text style={styles.basicDetailTitle}>Quiz TimePeriod</Text>
+          <Text style={styles.basicDetailData}>{quiz.Basic_Details.TimePeriod}</Text>
+        </View> */}
         <View style={styles.basicDetailRow}>
           <Text style={styles.basicDetailTitle}>Quiz Duration</Text>
           <Text style={styles.basicDetailData}>{quiz.Basic_Details.Time}</Text>
