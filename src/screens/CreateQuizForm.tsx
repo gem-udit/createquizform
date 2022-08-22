@@ -18,7 +18,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import QuizDetails from "./components/QuizDetails";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
+
 
 const CreateQuizForm = () => {
   const [isPickerShowFromDate, setIsPickerShowFromDate] = useState(false);
@@ -77,7 +77,10 @@ const CreateQuizForm = () => {
       category: "",
       quizName: "",
       Time: 0,
-      TimePeriod: {},
+      TimePeriod: {
+        start: new Date(),
+        end: new Date()
+      },
       pointsPerQuestion: 0,
       logoUrl: "",
     },
@@ -89,6 +92,7 @@ const CreateQuizForm = () => {
     No_ofQuestions: "",
     quizName: "",
     Time: "",
+    TimePeriod: "",
     category: "",
     pointsPerQuestion: "",
     logoUrl: "",
@@ -98,6 +102,7 @@ const CreateQuizForm = () => {
     No_ofQuestions: "",
     quizName: "",
     Time: "",
+    TimePeriod: "",
     category: "",
     pointsPerQuestion: "",
     logoUrl: "",
@@ -274,6 +279,7 @@ const CreateQuizForm = () => {
       No_ofQuestions: quizInfoErrors.No_ofQuestions,
       quizName: quizInfoErrors.quizName,
       Time: quizInfoErrors.Time,
+      TimePeriod: quizInfoErrors.TimePeriod,
       pointsPerQuestion: quizInfoErrors.pointsPerQuestion,
       logoUrl: quizInfoErrors.logoUrl,
       category: quizInfoErrors.category,
@@ -300,11 +306,12 @@ const CreateQuizForm = () => {
         No_ofQuestions: "",
         quizName: "",
         Time: "",
+        TimePeriod: "",
         pointsPerQuestion: "",
         logoUrl: "",
         category: "",
       });
-      console.log(quizDetails.logoUrl);
+      // console.log(quizDetails.logoUrl);
       setshowContainer(false);
     }
   };
@@ -367,7 +374,7 @@ const CreateQuizForm = () => {
         Ques: "",
         CorrectAns: "",
       });
-      console.log(quiz);
+      // console.log(quiz);
     }
   };
 
@@ -392,7 +399,7 @@ const CreateQuizForm = () => {
     });
   };
   const submitQuiz = async () => {
-    console.log(quiz);
+    // console.log(quiz);
     try {
       await addDoc(collection(db, "QuizData"), quiz);
     } catch (err) {
@@ -400,7 +407,62 @@ const CreateQuizForm = () => {
     }
     setQuizSubmitted(true);
   };
+  const edit = async () => {
+    console.log("edit")
+    console.log(quiz.Questionare)
+    setshowContainer(true)
+    setQuizDetails({
+      Id: quiz.Basic_Details.Id,
+      No_ofQuestions: (quiz.Basic_Details.No_ofQuestions).toString(),
+      quizName: quiz.Basic_Details.quizName,
+      Time: (quiz.Basic_Details.Time).toString(),
+      TimePeriod: "",
+      pointsPerQuestion: (quiz.Basic_Details.pointsPerQuestion).toString(),
+      logoUrl: quiz.Basic_Details.logoUrl,
+      category: quiz.Basic_Details.category,
+    });
+    setFromDate(quiz.Basic_Details.TimePeriod.start)
+    setToDate(quiz.Basic_Details.TimePeriod.end)
+    // setQuesAns({
+    //   Ques: "",
+    //   CorrectAns: "",
+    // });
 
+    // setIncorrectAnswers({
+    //   option1: "",
+    //   option2: "",
+    //   option3: "",
+    // });
+  }
+  const cancel = async () => {
+    console.log("cancel")
+    setQuizDetails({
+      Id: Date.now().toString(),
+      No_ofQuestions: "",
+      quizName: "",
+      Time: "",
+      TimePeriod: "",
+      category: "",
+      pointsPerQuestion: "",
+      logoUrl: "",
+    })
+    setQuiz({
+      Basic_Details: {
+        Id: "",
+        No_ofQuestions: -1,
+        category: "",
+        quizName: "",
+        Time: 0,
+        TimePeriod: {
+          start: new Date(),
+          end: new Date()
+        },
+        pointsPerQuestion: 0,
+        logoUrl: "",
+      },
+      Questionare: [],
+    })
+  }
   const saveQuizLogo = async () => {
     setSaveLogoBtnClicked(true);
     const uploadUri = quizDetails.logoUrl;
@@ -734,7 +796,7 @@ const CreateQuizForm = () => {
               <View style={styles.completedFormContainer}>
                 <Text style={styles.completedFormText}>
                   Quiz Details and Questions filled Successfully. Review the
-                  detials and click on Submit Button at bottom of screen to save
+                  details and click on Submit Button at bottom of screen to save
                   your Quiz
                 </Text>
 
@@ -745,9 +807,27 @@ const CreateQuizForm = () => {
                       styles.submitBtnBackground,
                       styles.questionButtonsStyling,
                     ]}
+                    onPress={edit}
+                  >
+                    <Text style={styles.btnText}>edit</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.submitBtnBackground,
+                      styles.questionButtonsStyling,
+                    ]}
                     onPress={submitQuiz}
                   >
                     <Text style={styles.btnText}>Submit</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.submitBtnBackground,
+                      styles.questionButtonsStyling,
+                    ]}
+                    onPress={cancel}
+                  >
+                    <Text style={styles.btnText}>Cancel</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -894,6 +974,13 @@ const styles = StyleSheet.create({
   questionButtonsStyling: {
     width: "25%",
     height: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+  questionButtonsStyling1: {
+    width: "25%",
+    height: "30%",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
