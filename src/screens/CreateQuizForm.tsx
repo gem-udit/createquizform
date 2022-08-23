@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { storage, db } from "../firebase/config";
 import { collection, addDoc } from "firebase/firestore";
 import { Picker } from "@react-native-picker/picker";
+import Dropdown from "react-native-element-dropdown/src/components/Dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   View,
@@ -18,7 +19,6 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import QuizDetails from "./components/QuizDetails";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-
 
 const CreateQuizForm = () => {
   const [isPickerShowFromDate, setIsPickerShowFromDate] = useState(false);
@@ -64,6 +64,8 @@ const CreateQuizForm = () => {
       value: "Other",
     },
   ];
+  const [isFocus, setIsFocus] = useState(false);
+
   const [showContainer, setshowContainer] = useState(true);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
@@ -79,7 +81,7 @@ const CreateQuizForm = () => {
       Time: 0,
       TimePeriod: {
         start: new Date(),
-        end: new Date()
+        end: new Date(),
       },
       pointsPerQuestion: 0,
       logoUrl: "",
@@ -130,15 +132,26 @@ const CreateQuizForm = () => {
     option3: "",
   });
 
-  const onChangeQuizDetails = (name: string) => (text: string) => {
+  const onChangeQuizDetails = (name: string) => (fieldData: any) => {
     setQuizDetailsErrors({
       ...quizDetailsErrors,
       [name]: "",
     });
-    setQuizDetails({
-      ...quizDetails,
-      [name]: text,
-    });
+    // setQuizDetails({
+    //   ...quizDetails,
+    //   [name]: fieldData,
+    // });
+    if (name === "category") {
+      setQuizDetails({
+        ...quizDetails,
+        [name]: fieldData.value,
+      });
+    } else {
+      setQuizDetails({
+        ...quizDetails,
+        [name]: fieldData,
+      });
+    }
   };
 
   const onChangeQuesAns = (name: string) => (text: string) => {
@@ -176,33 +189,6 @@ const CreateQuizForm = () => {
         ...quizDetails,
         logoUrl: systemImage.uri,
       });
-
-      // const uploadUri = systemImage.uri;
-      // let filename = uploadUri.substring(uploadUri.lastIndexOf("/") + 1);
-      // const response = await (await fetch(uploadUri)).blob();
-      // const storageRef = ref(storage, `files/${filename}`);
-      // const uploadTask = uploadBytesResumable(storageRef, response);
-
-      // uploadTask.on(
-      //   "state_changed",
-      //   (snapshot) => {
-      //     const progress = Math.round(
-      //       (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-      //     );
-      //     //setProgresspercent(progress);
-      //   },
-      //   (error) => {
-      //     alert(error);
-      //   },
-      //   () => {
-      //     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-      //       setQuizDetails({
-      //         ...quizDetails,
-      //         logoUrl: downloadURL,
-      //       });
-      //     });
-      //   }
-      // );
     }
     setQuizDetailsErrors({
       ...quizDetailsErrors,
@@ -213,10 +199,10 @@ const CreateQuizForm = () => {
   const submitQuizDetails = (): void => {
     let quizInfoErrors = quizDetailsErrors;
     let isQuizDetailsValid = true;
-    if (!saveLogoBtnClicked) {
-      setSaveLogoBtnClickedError("Please click on save image");
-      isQuizDetailsValid = false;
-    }
+    // if (!saveLogoBtnClicked) {
+    //   setSaveLogoBtnClickedError("Please click on save image");
+    //   isQuizDetailsValid = false;
+    // }
     if (quizDetails.quizName === "") {
       quizInfoErrors.quizName = "Quiz Name is Required";
       isQuizDetailsValid = false;
@@ -408,21 +394,21 @@ const CreateQuizForm = () => {
     setQuizSubmitted(true);
   };
   const edit = async () => {
-    console.log("edit")
-    console.log(quiz.Questionare)
-    setshowContainer(true)
+    console.log("edit");
+    console.log(quiz.Questionare);
+    setshowContainer(true);
     setQuizDetails({
       Id: quiz.Basic_Details.Id,
-      No_ofQuestions: (quiz.Basic_Details.No_ofQuestions).toString(),
+      No_ofQuestions: quiz.Basic_Details.No_ofQuestions.toString(),
       quizName: quiz.Basic_Details.quizName,
-      Time: (quiz.Basic_Details.Time).toString(),
+      Time: quiz.Basic_Details.Time.toString(),
       TimePeriod: "",
-      pointsPerQuestion: (quiz.Basic_Details.pointsPerQuestion).toString(),
+      pointsPerQuestion: quiz.Basic_Details.pointsPerQuestion.toString(),
       logoUrl: quiz.Basic_Details.logoUrl,
       category: quiz.Basic_Details.category,
     });
-    setFromDate(quiz.Basic_Details.TimePeriod.start)
-    setToDate(quiz.Basic_Details.TimePeriod.end)
+    setFromDate(quiz.Basic_Details.TimePeriod.start);
+    setToDate(quiz.Basic_Details.TimePeriod.end);
     // setQuesAns({
     //   Ques: "",
     //   CorrectAns: "",
@@ -433,9 +419,9 @@ const CreateQuizForm = () => {
     //   option2: "",
     //   option3: "",
     // });
-  }
+  };
   const cancel = async () => {
-    console.log("cancel")
+    console.log("cancel");
     setQuizDetails({
       Id: Date.now().toString(),
       No_ofQuestions: "",
@@ -445,7 +431,7 @@ const CreateQuizForm = () => {
       category: "",
       pointsPerQuestion: "",
       logoUrl: "",
-    })
+    });
     setQuiz({
       Basic_Details: {
         Id: "",
@@ -455,17 +441,21 @@ const CreateQuizForm = () => {
         Time: 0,
         TimePeriod: {
           start: new Date(),
-          end: new Date()
+          end: new Date(),
         },
         pointsPerQuestion: 0,
         logoUrl: "",
       },
       Questionare: [],
-    })
-  }
+    });
+  };
   const saveQuizLogo = async () => {
     setSaveLogoBtnClicked(true);
     const uploadUri = quizDetails.logoUrl;
+    // if (Platform.OS === "ios") {
+    //   uploadUri.replace("file://", "");
+    // }
+    console.log(uploadUri);
     let filename = uploadUri.substring(uploadUri.lastIndexOf("/") + 1);
     const response = await (await fetch(uploadUri)).blob();
     const storageRef = ref(storage, `files/${filename}`);
@@ -480,6 +470,7 @@ const CreateQuizForm = () => {
         setProgressPercent(progress);
       },
       (error) => {
+        console.log(error);
         alert(error);
       },
       () => {
@@ -554,11 +545,11 @@ const CreateQuizForm = () => {
                       {quizDetailsErrors.quizName}
                     </Text>
                   )}
-                  <Text>Select Quiz Category</Text>
+                  {/* <Text>Select Quiz Category</Text>
                   <View style={styles.textInputStyling}>
                     <Picker
                       selectedValue={quizDetails.category}
-                      mode={"dialog"}
+                      mode={"dropdown"}
                       style={styles.pickerStyle}
                       prompt="Choose Category"
                       onValueChange={onChangeQuizDetails("category")}
@@ -580,58 +571,101 @@ const CreateQuizForm = () => {
                     <Text style={styles.incorrectFeedback}>
                       {quizDetailsErrors.category}
                     </Text>
-                  )}
-                  <Text>Enter Quiz Time Period</Text>
-                  <View style={styles.pickedDateContainer}>
-                    <Text style={styles.pickedDate}>
-                      {fromDate.toDateString()}
+                  )} */}
+                  <Text>Select Quiz Category</Text>
+                  <Dropdown
+                    style={styles.dropdown}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={categories}
+                    value={quizDetails.category}
+                    labelField={"text"}
+                    valueField={"value"}
+                    placeholder={!isFocus ? "Select category" : "..."}
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
+                    onChange={onChangeQuizDetails("category")}
+                  />
+                  {quizDetailsErrors.category !== "" && (
+                    <Text style={styles.incorrectFeedback}>
+                      {quizDetailsErrors.category}
                     </Text>
-                  </View>
-                  {!isPickerShowFromDate && (
-                    <View style={styles.datebtnContainer}>
-                      <Button
-                        title="From Date"
-                        color="purple"
-                        onPress={showPickerFromDate}
+                  )}
+                  {Platform.OS === "ios" && (
+                    <View style={{ marginTop: 10 }}>
+                      <Text>Select starting date of quiz (Touch below)</Text>
+                      <DateTimePicker
+                        value={fromDate}
+                        mode={"date"}
+                        display={"default"}
+                        onChange={onChangeFromDate}
+                        style={styles.datePickerIOS}
+                      />
+                      <Text>Select expiry date of quiz (Touch Below)</Text>
+                      <DateTimePicker
+                        value={toDate}
+                        mode={"date"}
+                        display={"compact"}
+                        onChange={onChangeToDate}
+                        style={styles.datePickerIOS}
                       />
                     </View>
                   )}
+                  {Platform.OS !== "ios" && <Text>Enter Quiz Time Period</Text>}
+                  {Platform.OS !== "ios" && (
+                    <View>
+                      <View style={styles.pickedDateContainer}>
+                        <Text style={styles.pickedDate}>
+                          {fromDate.toDateString()}
+                        </Text>
+                      </View>
+                      {!isPickerShowFromDate && (
+                        <View style={styles.datebtnContainer}>
+                          <Button
+                            title="From Date"
+                            color="purple"
+                            onPress={showPickerFromDate}
+                          />
+                        </View>
+                      )}
+                      {isPickerShowFromDate && (
+                        <DateTimePicker
+                          value={fromDate}
+                          mode={"date"}
+                          display={"default"}
+                          is24Hour={true}
+                          onChange={onChangeFromDate}
+                          style={styles.datePickerAndroid}
+                        />
+                      )}
+                      <View style={styles.pickedDateContainer}>
+                        <Text style={styles.pickedDate}>
+                          {toDate.toDateString()}
+                        </Text>
+                      </View>
+                      {!isPickerShowToDate && (
+                        <View style={styles.datebtnContainer}>
+                          <Button
+                            title="To Date"
+                            color="purple"
+                            onPress={showPickerToDate}
+                          />
+                        </View>
+                      )}
 
-                  {/* The date picker */}
-                  {isPickerShowFromDate && (
-                    <DateTimePicker
-                      value={fromDate}
-                      mode={"date"}
-                      display={Platform.OS === "ios" ? "spinner" : "default"}
-                      is24Hour={true}
-                      onChange={onChangeFromDate}
-                      style={styles.datePicker}
-                    />
-                  )}
-                  <View style={styles.pickedDateContainer}>
-                    <Text style={styles.pickedDate}>
-                      {toDate.toDateString()}
-                    </Text>
-                  </View>
-                  {!isPickerShowToDate && (
-                    <View style={styles.datebtnContainer}>
-                      <Button
-                        title="To Date"
-                        color="purple"
-                        onPress={showPickerToDate}
-                      />
+                      {isPickerShowToDate && (
+                        <DateTimePicker
+                          value={toDate}
+                          mode={"date"}
+                          display={"default"}
+                          is24Hour={true}
+                          onChange={onChangeToDate}
+                          style={styles.datePickerAndroid}
+                        />
+                      )}
                     </View>
-                  )}
-
-                  {isPickerShowToDate && (
-                    <DateTimePicker
-                      value={toDate}
-                      mode={"date"}
-                      display={Platform.OS === "ios" ? "spinner" : "default"}
-                      is24Hour={true}
-                      onChange={onChangeToDate}
-                      style={styles.datePicker}
-                    />
                   )}
                   <Text>Enter Quiz Duration</Text>
                   <TextInput
@@ -1012,12 +1046,40 @@ const styles = StyleSheet.create({
   datebtnContainer: {
     padding: 30,
   },
-  datePicker: {
+  datePickerIOS: {
+    width: "40%",
+    height: 50,
+    backgroundColor: "white",
+    marginTop: 5,
+    marginBottom: 5,
+  },
+  datePickerAndroid: {
     width: 320,
     height: 260,
     display: "flex",
     justifyContent: "center",
     alignItems: "flex-start",
+  },
+  dropdown: {
+    height: 50,
+    borderColor: "gray",
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
 });
 export default CreateQuizForm;
