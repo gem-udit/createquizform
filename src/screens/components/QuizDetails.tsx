@@ -1,13 +1,5 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 const QuizDetails = ({ quiz }) => {
   return (
     <View style={styles.quizDetailsQuestionsContainer}>

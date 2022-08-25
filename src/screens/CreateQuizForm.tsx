@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { storage, db } from "../firebase/config";
 import { collection, addDoc } from "firebase/firestore";
-import { Picker } from "@react-native-picker/picker";
 import Dropdown from "react-native-element-dropdown/src/components/Dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {
@@ -199,10 +198,10 @@ const CreateQuizForm = () => {
   const submitQuizDetails = (): void => {
     let quizInfoErrors = quizDetailsErrors;
     let isQuizDetailsValid = true;
-    // if (!saveLogoBtnClicked) {
-    //   setSaveLogoBtnClickedError("Please click on save image");
-    //   isQuizDetailsValid = false;
-    // }
+    if (!saveLogoBtnClicked) {
+      setSaveLogoBtnClickedError("Please click on save image");
+      isQuizDetailsValid = false;
+    }
     if (quizDetails.quizName === "") {
       quizInfoErrors.quizName = "Quiz Name is Required";
       isQuizDetailsValid = false;
@@ -297,7 +296,6 @@ const CreateQuizForm = () => {
         logoUrl: "",
         category: "",
       });
-      // console.log(quizDetails.logoUrl);
       setshowContainer(false);
     }
   };
