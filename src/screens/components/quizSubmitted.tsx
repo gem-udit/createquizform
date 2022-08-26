@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
     View,
     Text,
     StyleSheet,
     TouchableOpacity,
 } from "react-native";
+import { QuizContext } from "../../context/QuizContextApi";
 
 const QuizSubmitted = ({ navigation, route }) => {
+    const { clearquiz }: any = useContext(QuizContext);
+
     return (
         <View style={styles.container}>
             <View style={styles.createQuizHeader}>
@@ -21,7 +24,7 @@ const QuizSubmitted = ({ navigation, route }) => {
                     }}
                 >
                     <Text>Quiz Saved Successfully</Text>
-                    <TouchableOpacity onPress={() => { navigation.navigate("BasicDetails") }}>
+                    <TouchableOpacity onPress={() => { clearquiz(); navigation.navigate("BasicDetails") }}>
                         <Text>Back to Basic Create Quiz page</Text>
                     </TouchableOpacity>
                 </View>
