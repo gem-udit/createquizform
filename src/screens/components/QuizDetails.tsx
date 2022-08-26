@@ -1,78 +1,181 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
-const QuizDetails = ({ quiz }) => {
+import React, { useContext, useEffect } from "react";
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
+import { QuizContext } from "../../context/QuizContextApi";
+import { storage, db } from "../../firebase/config";
+import { collection, addDoc } from "firebase/firestore";
+const QuizDetails = ({ navigation, route }) => {
+  const { quiz, submitQuizDetails }: any = useContext(QuizContext);
+
+  const submitQuiz = async () => {
+    // console.log(quiz);
+    try {
+      await addDoc(collection(db, "QuizData"), quiz);
+
+    } catch (err) {
+      console.log(err);
+    }
+    navigation.navigate("quizSubmitted")
+  };
+  // const cancel = async () => {
+  //   console.log("cancel");
+  //   setQuizDetails({
+  //     Id: Date.now().toString(),
+  //     No_ofQuestions: "",
+  //     quizName: "",
+  //     Time: "",
+  //     TimePeriod: "",
+  //     category: "",
+  //     pointsPerQuestion: "",
+  //     logoUrl: "",
+  //   });
+  //   setQuiz({
+  //     Basic_Details: {
+  //       Id: "",
+  //       No_ofQuestions: -1,
+  //       category: "",
+  //       quizName: "",
+  //       Time: 0,
+  //       TimePeriod: {
+  //         start: new Date(),
+  //         end: new Date(),
+  //       },
+  //       pointsPerQuestion: 0,
+  //       logoUrl: "",
+  //     },
+  //     Questionare: [],
+  //   });
+  // };
+
   return (
-    <View style={styles.quizDetailsQuestionsContainer}>
-      <View style={styles.basicDetailContainer}>
-        <Text style={styles.quizDetailsHeading}>Quiz Basic Details</Text>
-        <View style={styles.quizDetailsQuizLogoContainer}>
-          <Image
-            style={styles.quizDetailsQuizLogo}
-            source={{ uri: quiz.Basic_Details.logoUrl }}
-          ></Image>
-        </View>
-        <View style={styles.basicDetailRow}>
-          <Text style={styles.basicDetailTitle}>Quiz Title</Text>
-          <Text style={styles.basicDetailData}>
-            {quiz.Basic_Details.quizName}
+    <View style={styles.container}>
+      <View style={styles.createQuizHeader}>
+        <Text style={styles.createQuizTxt}>Create Quiz</Text>
+      </View>
+      <ScrollView>
+        <View style={styles.completedFormContainer}>
+          <Text style={styles.completedFormText}>
+            Quiz Details and Questions filled Successfully. Review the
+            details and click on Submit Button at bottom of screen to save
+            your Quiz
           </Text>
-        </View>
-        {/* <View style={styles.basicDetailRow}>
-          <Text style={styles.basicDetailTitle}>Quiz TimePeriod</Text>
-          <Text style={styles.basicDetailData}>{quiz.Basic_Details.TimePeriod}</Text>
-        </View> */}
-        <View style={styles.basicDetailRow}>
-          <Text style={styles.basicDetailTitle}>Quiz Duration</Text>
-          <Text style={styles.basicDetailData}>{quiz.Basic_Details.Time}</Text>
-        </View>
-        <View style={styles.basicDetailRow}>
-          <Text style={styles.basicDetailTitle}>Points Per Questioons</Text>
-          <Text style={styles.basicDetailData}>
-            {quiz.Basic_Details.pointsPerQuestion}
-          </Text>
-        </View>
-        <View style={styles.basicDetailRow}>
-          <Text style={styles.basicDetailTitle}>Total Questions</Text>
-          <Text style={styles.basicDetailData}>
-            {quiz.Basic_Details.No_ofQuestions}
-          </Text>
-        </View>
-        <View style={styles.basicDetailRow}>
-          <Text style={styles.basicDetailTitle}>Category</Text>
-          <Text style={styles.basicDetailData}>
-            {quiz.Basic_Details.category}
-          </Text>
-        </View>
-        <Text style={styles.quizDetailsHeading}>Quiz Questions</Text>
-        {quiz.Questionare.map((question: any, index: number) => (
-          <View style={styles.questionareContainer}>
-            <View>
-              <Text style={styles.questionareTitle}>Question {index + 1}</Text>
-              <Text style={styles.questionareData}>
-                <Text>{question.Ques}</Text>
-              </Text>
+          <View style={styles.quizDetailsQuestionsContainer}>
+            <View style={styles.basicDetailContainer}>
+              <Text style={styles.quizDetailsHeading}>Quiz Basic Details</Text>
+              <View style={styles.quizDetailsQuizLogoContainer}>
+                <Image
+                  style={styles.quizDetailsQuizLogo}
+                  source={{ uri: quiz.Basic_Details.logoUrl }}
+                ></Image>
+              </View>
+              <View style={styles.basicDetailRow}>
+                <Text style={styles.basicDetailTitle}>Quiz Title</Text>
+                <Text style={styles.basicDetailData}>
+                  {quiz.Basic_Details.quizName}
+                </Text>
+              </View>
+              {/* <View style={styles.basicDetailRow}>
+                <Text style={styles.basicDetailTitle}>Quiz From Date</Text>
+                <Text style={styles.basicDetailData}>{quiz.Basic_Details.TimePeriod.start}</Text>
+              </View> */}
+              <View style={styles.basicDetailRow}>
+                <Text style={styles.basicDetailTitle}>Quiz Duration</Text>
+                <Text style={styles.basicDetailData}>{quiz.Basic_Details.Time}</Text>
+              </View>
+              <View style={styles.basicDetailRow}>
+                <Text style={styles.basicDetailTitle}>Points Per Questioons</Text>
+                <Text style={styles.basicDetailData}>
+                  {quiz.Basic_Details.pointsPerQuestion}
+                </Text>
+              </View>
+              <View style={styles.basicDetailRow}>
+                <Text style={styles.basicDetailTitle}>Total Questions</Text>
+                <Text style={styles.basicDetailData}>
+                  {quiz.Basic_Details.No_ofQuestions}
+                </Text>
+              </View>
+              <View style={styles.basicDetailRow}>
+                <Text style={styles.basicDetailTitle}>Category</Text>
+                <Text style={styles.basicDetailData}>
+                  {quiz.Basic_Details.category}
+                </Text>
+              </View>
+              <Text style={styles.quizDetailsHeading}>Quiz Questions</Text>
+              {quiz.Questionare.map((question: any, index: number) => (
+                <View style={styles.questionareContainer}>
+                  <View>
+                    <Text style={styles.questionareTitle}>Question {index + 1}</Text>
+                    <Text style={styles.questionareData}>
+                      <Text>{question.Ques}</Text>
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.questionareTitle}>Answer</Text>
+                    <Text style={styles.questionareData}>{question.CorrectAns}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.questionareTitle}>Incorrect Answer</Text>
+                    {question.Incorect_Ans.map(
+                      (incorrectOption: String, index: number) => (
+                        <Text style={styles.questionareData}>
+                          {index + 1}. {incorrectOption}
+                        </Text>
+                      )
+                    )}
+                  </View>
+                </View>
+              ))}
             </View>
-            <View>
-              <Text style={styles.questionareTitle}>Answer</Text>
-              <Text style={styles.questionareData}>{question.CorrectAns}</Text>
-            </View>
-            <View>
-              <Text style={styles.questionareTitle}>Incorrect Answer</Text>
-              {question.Incorect_Ans.map(
-                (incorrectOption: String, index: number) => (
-                  <Text style={styles.questionareData}>
-                    {index + 1}. {incorrectOption}
-                  </Text>
-                )
-              )}
+            <View style={styles.btnContainer}>
+
+              <TouchableOpacity
+                style={[
+                  styles.submitBtnBackground,
+                  styles.questionButtonsStyling,
+                ]}
+                onPress={submitQuiz}
+              >
+                <Text style={styles.btnText}>Submit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.submitBtnBackground,
+                  styles.questionButtonsStyling,
+                ]}
+              // onPress={Clear}
+              >
+                <Text style={styles.btnText}>Delete quiz</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        ))}
-      </View>
+        </View>
+      </ScrollView>
     </View>
-  );
+  )
 };
 const styles = StyleSheet.create({
+  container: {
+    height: "100%",
+  },
+  createQuizTxt: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 26,
+  },
+  createQuizHeader: {
+    backgroundColor: "lightblue",
+    alignItems: "center",
+    justifyContent: "center",
+    height: 120,
+  },
+  completedFormContainer: {
+    width: "100%",
+    padding: 10,
+  },
+  completedFormText: {
+    marginBottom: 10,
+    color: "grey",
+    fontSize: 16,
+  },
   basicDetailRow: {
     flexDirection: "row",
   },
@@ -147,6 +250,25 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 10,
     marginBottom: 10,
+  },
+  submitBtnBackground: {
+    backgroundColor: "green",
+  },
+  questionButtonsStyling: {
+    width: "25%",
+    height: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+  btnText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  btnContainer: {
+    height: 40,
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
 export default QuizDetails;

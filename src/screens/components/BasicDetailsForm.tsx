@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { QuizContext } from "../../context/QuizContextApi";
 import Dropdown from "react-native-element-dropdown/src/components/Dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {
@@ -15,11 +16,13 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase/config";
-const BasicDetailForm = ({ quizDetailsProp, submitQuizDetails }) => {
+import Navigation from "../../Navigation";
+const BasicDetailForm = ({ navigation }) => {
   const [isPickerShowFromDate, setIsPickerShowFromDate] = useState(false);
   const [isPickerShowToDate, setIsPickerShowToDate] = useState(false);
   const [fromDate, setFromDate] = useState(new Date(Date.now()));
   const [toDate, setToDate] = useState(new Date(Date.now()));
+  const quizContext = useContext(QuizContext);
 
   const showPickerFromDate = () => {
     setIsPickerShowFromDate(true);
@@ -33,12 +36,14 @@ const BasicDetailForm = ({ quizDetailsProp, submitQuizDetails }) => {
     if (Platform.OS === "android") {
       setIsPickerShowFromDate(false);
     }
+    console.log(value)
   };
   const onChangeToDate = (event: any, value: Date) => {
     setToDate(value);
     if (Platform.OS === "android") {
       setIsPickerShowToDate(false);
     }
+    console.log(value)
   };
 
   const categories = [
@@ -63,16 +68,29 @@ const BasicDetailForm = ({ quizDetailsProp, submitQuizDetails }) => {
   const [progressPercent, setProgressPercent] = useState(0);
   const [saveLogoBtnClicked, setSaveLogoBtnClicked] = useState(false);
   const [saveLogoBtnClickedError, setSaveLogoBtnClickedError] = useState("");
+  let { submitQuizDetails }: any = useContext(QuizContext);
   const integerRegExp = RegExp(/^[0-9]+$/);
   const [quizDetails, setQuizDetails] = useState({
-    Id: quizDetailsProp.Id,
-    No_ofQuestions: quizDetailsProp.No_ofQuestions,
-    quizName: quizDetailsProp.quizName,
-    Time: quizDetailsProp.Time,
-    TimePeriod: quizDetailsProp.TimePeriod,
-    category: quizDetailsProp.category,
-    pointsPerQuestion: quizDetailsProp.pointsPerQuestion,
-    logoUrl: quizDetailsProp.logoUrl,
+    //   Id: quizDetailsProp.Id,
+    //   No_ofQuestions: quizDetailsProp.No_ofQuestions,
+    //   quizName: quizDetailsProp.quizName,
+    //   Time: quizDetailsProp.Time,
+    //   TimePeriod: quizDetailsProp.TimePeriod,
+    //   category: quizDetailsProp.category,
+    //   pointsPerQuestion: quizDetailsProp.pointsPerQuestion,
+    //   logoUrl: quizDetailsProp.logoUrl,
+    // });
+    Id: Date.now().toString(),
+    No_ofQuestions: "",
+    quizName: "",
+    Time: "",
+    TimePeriod: {
+      start: new Date(),
+      end: new Date(),
+    },
+    category: "",
+    pointsPerQuestion: "",
+    logoUrl: "",
   });
 
   const [quizDetailsErrors, setQuizDetailsErrors] = useState({
@@ -231,11 +249,25 @@ const BasicDetailForm = ({ quizDetailsProp, submitQuizDetails }) => {
         No_ofQuestions: "",
         quizName: "",
         Time: "",
-        TimePeriod: "",
+        TimePeriod: {
+          start: new Date(),
+          end: new Date(),
+        },
         pointsPerQuestion: "",
         logoUrl: "",
         category: "",
       });
+      navigation.navigate("Questions", {
+        quesAns: {
+          Ques: "",
+          CorrectAns: "",
+        },
+        incorrectAns: {
+          option1: "",
+          option2: "",
+          option3: "",
+        },
+      })
     }
   };
   return (

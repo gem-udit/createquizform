@@ -19,8 +19,72 @@ const QuizState = ({ children }: any) => {
     },
     Questionare: [],
   });
+  const submitQuizDetails = (quizDetails: any, fromDate: any, toDate: any) => {
+
+    setQuiz({
+
+      ...quiz,
+
+      Basic_Details: {
+
+        Id: quizDetails.Id,
+
+        No_ofQuestions: Number(quizDetails.No_ofQuestions),
+
+        quizName: quizDetails.quizName,
+
+        Time: Number(quizDetails.Time),
+
+        pointsPerQuestion: Number(quizDetails.pointsPerQuestion),
+
+        logoUrl: quizDetails.logoUrl,
+
+        category: quizDetails.category,
+
+        TimePeriod: {
+
+          start: fromDate,
+
+          end: toDate,
+
+        },
+
+      },
+
+    });
+
+  };
+
+  const submitQuestion = (quesAns: any, incorrectAnswers: any) => {
+
+    setQuiz({
+
+      ...quiz,
+
+      Questionare: [
+
+        ...quiz.Questionare,
+
+        {
+
+          Ques: quesAns.Ques,
+
+          CorrectAns: quesAns.CorrectAns,
+
+          Incorect_Ans: [
+
+            incorrectAnswers.option1,
+
+            incorrectAnswers.option2,
+
+            incorrectAnswers.option3,
+          ],
+        },
+      ],
+    });
+  };
   return (
-    <QuizContext.Provider value={{ quiz, setQuiz }}>
+    <QuizContext.Provider value={{ quiz, submitQuizDetails, submitQuestion }}>
       {children}
     </QuizContext.Provider>
   );
