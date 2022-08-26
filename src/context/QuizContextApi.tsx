@@ -6,7 +6,7 @@ const QuizState = ({ children }: any) => {
   const [quiz, setQuiz] = useState({
     Basic_Details: {
       Id: "",
-      No_ofQuestions: -1,
+      No_ofQuestions: 0,
       category: "",
       quizName: "",
       Time: 0,
@@ -83,8 +83,45 @@ const QuizState = ({ children }: any) => {
       ],
     });
   };
+  const clearquiz = () => {
+    setQuiz({
+      Basic_Details: {
+        Id: "",
+        No_ofQuestions: 0,
+        category: "",
+        quizName: "",
+        Time: 0,
+        TimePeriod: {
+          start: new Date(),
+          end: new Date(),
+        },
+        pointsPerQuestion: 0,
+        logoUrl: "",
+      },
+      Questionare: [],
+    });
+  };
+  const editquiz = () => {
+    setQuiz({
+      Basic_Details: {
+        Id: quiz.Basic_Details.Id,
+        No_ofQuestions: quiz.Basic_Details.No_ofQuestions,
+        category: quiz.Basic_Details.category,
+        quizName: quiz.Basic_Details.quizName,
+        Time: quiz.Basic_Details.Time,
+        TimePeriod: {
+          start: new Date(),
+          end: new Date(),
+        },
+        pointsPerQuestion: quiz.Basic_Details.pointsPerQuestion,
+        logoUrl: "",
+      },
+      Questionare: [],
+    });
+  };
+
   return (
-    <QuizContext.Provider value={{ quiz, submitQuizDetails, submitQuestion }}>
+    <QuizContext.Provider value={{ quiz, submitQuizDetails, submitQuestion, clearquiz, editquiz }}>
       {children}
     </QuizContext.Provider>
   );

@@ -1,50 +1,29 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
 import { QuizContext } from "../../context/QuizContextApi";
-import { storage, db } from "../../firebase/config";
+import { db } from "../../firebase/config";
 import { collection, addDoc } from "firebase/firestore";
-const QuizDetails = ({ navigation, route }) => {
-  const { quiz, submitQuizDetails }: any = useContext(QuizContext);
+const QuizDetails = ({ navigation }) => {
+  const { quiz, clearquiz, editquiz }: any = useContext(QuizContext);
 
   const submitQuiz = async () => {
-    // console.log(quiz);
     try {
       await addDoc(collection(db, "QuizData"), quiz);
-
     } catch (err) {
       console.log(err);
     }
     navigation.navigate("quizSubmitted")
   };
-  // const cancel = async () => {
-  //   console.log("cancel");
-  //   setQuizDetails({
-  //     Id: Date.now().toString(),
-  //     No_ofQuestions: "",
-  //     quizName: "",
-  //     Time: "",
-  //     TimePeriod: "",
-  //     category: "",
-  //     pointsPerQuestion: "",
-  //     logoUrl: "",
-  //   });
-  //   setQuiz({
-  //     Basic_Details: {
-  //       Id: "",
-  //       No_ofQuestions: -1,
-  //       category: "",
-  //       quizName: "",
-  //       Time: 0,
-  //       TimePeriod: {
-  //         start: new Date(),
-  //         end: new Date(),
-  //       },
-  //       pointsPerQuestion: 0,
-  //       logoUrl: "",
-  //     },
-  //     Questionare: [],
-  //   });
-  // };
+
+  const clearquizdetails = () => {
+    clearquiz()
+    navigation.navigate("BasicDetails")
+  }
+
+  const edit = () => {
+    editquiz()
+    navigation.navigate("BasicDetails")
+  }
 
   return (
     <View style={styles.container}>
@@ -61,22 +40,32 @@ const QuizDetails = ({ navigation, route }) => {
           <View style={styles.quizDetailsQuestionsContainer}>
             <View style={styles.basicDetailContainer}>
               <Text style={styles.quizDetailsHeading}>Quiz Basic Details</Text>
-              <View style={styles.quizDetailsQuizLogoContainer}>
-                <Image
-                  style={styles.quizDetailsQuizLogo}
-                  source={{ uri: quiz.Basic_Details.logoUrl }}
-                ></Image>
-              </View>
+              {quiz.Basic_Details.logoUrl !== "" &&
+                <View style={styles.quizDetailsQuizLogoContainer}>
+                  <Image
+                    style={styles.quizDetailsQuizLogo}
+                    source={{ uri: quiz.Basic_Details.logoUrl }}
+                  ></Image>
+                  <TouchableOpacity
+                    style={{ bottom: "12%", left: "50%" }}
+                    onPress={edit}
+                  >
+                    <Text>Edit</Text></TouchableOpacity>
+                </View>}
               <View style={styles.basicDetailRow}>
                 <Text style={styles.basicDetailTitle}>Quiz Title</Text>
                 <Text style={styles.basicDetailData}>
                   {quiz.Basic_Details.quizName}
                 </Text>
               </View>
-              {/* <View style={styles.basicDetailRow}>
+              <View style={styles.basicDetailRow}>
                 <Text style={styles.basicDetailTitle}>Quiz From Date</Text>
                 <Text style={styles.basicDetailData}>{quiz.Basic_Details.TimePeriod.start}</Text>
-              </View> */}
+              </View>
+              <View style={styles.basicDetailRow}>
+                <Text style={styles.basicDetailTitle}>Quiz To Date</Text>
+                <Text style={styles.basicDetailData}>{quiz.Basic_Details.TimePeriod.end}</Text>
+              </View>
               <View style={styles.basicDetailRow}>
                 <Text style={styles.basicDetailTitle}>Quiz Duration</Text>
                 <Text style={styles.basicDetailData}>{quiz.Basic_Details.Time}</Text>
@@ -101,27 +90,30 @@ const QuizDetails = ({ navigation, route }) => {
               </View>
               <Text style={styles.quizDetailsHeading}>Quiz Questions</Text>
               {quiz.Questionare.map((question: any, index: number) => (
-                <View style={styles.questionareContainer}>
-                  <View>
-                    <Text style={styles.questionareTitle}>Question {index + 1}</Text>
-                    <Text style={styles.questionareData}>
-                      <Text>{question.Ques}</Text>
-                    </Text>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={styles.questionareContainer}>
+                    <View>
+                      <Text style={styles.questionareTitle}>Question {index + 1}</Text>
+                      <Text style={styles.questionareData}>
+                        <Text>{question.Ques}</Text>
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.questionareTitle}>Answer</Text>
+                      <Text style={styles.questionareData}>{question.CorrectAns}</Text>
+                    </View>
+                    <View>
+                      <Text style={styles.questionareTitle}>Incorrect Answer</Text>
+                      {question.Incorect_Ans.map(
+                        (incorrectOption: String, index: number) => (
+                          <Text style={styles.questionareData}>
+                            {index + 1}.{incorrectOption}
+                          </Text>
+                        )
+                      )}
+                    </View>
                   </View>
-                  <View>
-                    <Text style={styles.questionareTitle}>Answer</Text>
-                    <Text style={styles.questionareData}>{question.CorrectAns}</Text>
-                  </View>
-                  <View>
-                    <Text style={styles.questionareTitle}>Incorrect Answer</Text>
-                    {question.Incorect_Ans.map(
-                      (incorrectOption: String, index: number) => (
-                        <Text style={styles.questionareData}>
-                          {index + 1}. {incorrectOption}
-                        </Text>
-                      )
-                    )}
-                  </View>
+                  <TouchableOpacity><Text>edit</Text></TouchableOpacity>
                 </View>
               ))}
             </View>
@@ -141,7 +133,7 @@ const QuizDetails = ({ navigation, route }) => {
                   styles.submitBtnBackground,
                   styles.questionButtonsStyling,
                 ]}
-              // onPress={Clear}
+                onPress={clearquizdetails}
               >
                 <Text style={styles.btnText}>Delete quiz</Text>
               </TouchableOpacity>
@@ -239,6 +231,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 12,
     borderRadius: 20,
+    flexDirection: "row"
   },
   quizDetailsQuizLogo: {
     width: 100,
