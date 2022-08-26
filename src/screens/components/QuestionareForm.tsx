@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,19 +7,19 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-const QuestionareForm = (
-  {
-    quesAnsProp,
-    incorrectAnswerProp,
-    onChangeQuesAns,
-    onChangeIncorrectOptions,
-    submitQuestion,
-  },
-  remainingQuestions: any
+import { QuizContext } from "../../context/QuizContextApi";
+const QuestionareForm = ({ route, navigation }
+  // {
+  //   quesAnsProp,
+  //   incorrectAnswerProp,
+  // }
 ) => {
+  const param = route.params;
   const [quesAns, setQuesAns] = useState({
-    Ques: quesAnsProp.Ques,
-    CorrectAns: quesAnsProp.CorrectAns,
+    // Ques: quesAnsProp.Ques,
+    // CorrectAns: quesAnsProp.CorrectAns,
+    Ques: "",
+    CorrectAns: "",
   });
 
   const [quesAnsError, setQuesAnsError] = useState({
@@ -28,9 +28,12 @@ const QuestionareForm = (
   });
 
   const [incorrectAnswers, setIncorrectAnswers] = useState({
-    option1: incorrectAnswerProp.option1,
-    option2: incorrectAnswerProp.option2,
-    option3: incorrectAnswerProp.option3,
+    // option1: incorrectAnswerProp.option1,
+    // option2: incorrectAnswerProp.option2,
+    // option3: incorrectAnswerProp.option3,
+    option1: "",
+    option2: "",
+    option3: "",
   });
 
   const [incorrectAnsError, setIncorrectAnsError] = useState({
@@ -43,7 +46,14 @@ const QuestionareForm = (
       ...quesAnsError,
       [name]: "",
     });
-    onChangeQuesAns(name, text);
+    // onChangeQuesAns(name, text);
+    setQuesAns({
+
+      ...quesAns,
+
+      [name]: text,
+
+    });
   };
 
   const handleIncorrectOptionsChange = (name: string) => (text: string) => {
@@ -51,8 +61,16 @@ const QuestionareForm = (
       ...incorrectAnsError,
       [name]: "",
     });
-    onChangeIncorrectOptions(name, text);
+    // onChangeIncorrectOptions(name, text);
+    setIncorrectAnswers({
+
+      ...incorrectAnswers,
+
+      [name]: text,
+
+    });
   };
+  let { submitQuestion, quiz }: any = useContext(QuizContext);
   const onSubmit = () => {
     let incorrectOptionError = incorrectAnsError;
     let questionAnswerError = quesAnsError;
@@ -97,6 +115,8 @@ const QuestionareForm = (
         Ques: "",
         CorrectAns: "",
       });
+      if (quiz.Questionare.length === quiz.Basic_Details.No_ofQuestions - 1)
+        navigation.navigate("quizDetails")
     }
   };
   const resetQuestion = () => {
@@ -213,7 +233,7 @@ const QuestionareForm = (
               </View>
               <View style={styles.quizCardTextContainer}>
                 <Text style={styles.quizCardText}>
-                  Total Question Remaining {remainingQuestions}
+                  Total Question Remaining{quiz.Basic_Details.No_ofQuestions - quiz.Questionare.length}
                 </Text>
               </View>
             </View>
