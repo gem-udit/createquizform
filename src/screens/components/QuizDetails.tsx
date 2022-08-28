@@ -21,7 +21,6 @@ const QuizDetails = ({ navigation }) => {
   }
 
   const edit = () => {
-    editquiz()
     navigation.navigate("BasicDetails")
   }
 
@@ -113,7 +112,10 @@ const QuizDetails = ({ navigation }) => {
                       )}
                     </View>
                   </View>
-                  <TouchableOpacity><Text>edit</Text></TouchableOpacity>
+                  <View style={{ flexDirection: "column" }}>
+                    <TouchableOpacity
+                      onPress={() => { navigation.navigate("Questions") }}><Text>edit</Text></TouchableOpacity>
+                    <TouchableOpacity><Text>delete</Text></TouchableOpacity></View>
                 </View>
               ))}
             </View>

@@ -8,16 +8,13 @@ import {
   ScrollView,
 } from "react-native";
 import { QuizContext } from "../../context/QuizContextApi";
-const QuestionareForm = ({ route, navigation }
-  // {
-  //   quesAnsProp,
-  //   incorrectAnswerProp,
-  // }
-) => {
+const QuestionareForm = ({ route, navigation }) => {
+  useEffect(() => {
+    if (quiz.Questionare.length === quiz.Basic_Details.No_ofQuestions)
+      navigation.navigate("quizDetails")
+  })
   const param = route.params;
   const [quesAns, setQuesAns] = useState({
-    // Ques: quesAnsProp.Ques,
-    // CorrectAns: quesAnsProp.CorrectAns,
     Ques: "",
     CorrectAns: "",
   });
@@ -28,9 +25,6 @@ const QuestionareForm = ({ route, navigation }
   });
 
   const [incorrectAnswers, setIncorrectAnswers] = useState({
-    // option1: incorrectAnswerProp.option1,
-    // option2: incorrectAnswerProp.option2,
-    // option3: incorrectAnswerProp.option3,
     option1: "",
     option2: "",
     option3: "",
@@ -46,11 +40,8 @@ const QuestionareForm = ({ route, navigation }
       ...quesAnsError,
       [name]: "",
     });
-    // onChangeQuesAns(name, text);
     setQuesAns({
-
       ...quesAns,
-
       [name]: text,
 
     });
@@ -61,11 +52,8 @@ const QuestionareForm = ({ route, navigation }
       ...incorrectAnsError,
       [name]: "",
     });
-    // onChangeIncorrectOptions(name, text);
     setIncorrectAnswers({
-
       ...incorrectAnswers,
-
       [name]: text,
 
     });

@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { QuizContext } from "../../context/QuizContextApi";
 import Dropdown from "react-native-element-dropdown/src/components/Dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -22,7 +23,6 @@ const BasicDetailForm = ({ navigation }) => {
   const [isPickerShowToDate, setIsPickerShowToDate] = useState(false);
   const [fromDate, setFromDate] = useState(new Date(Date.now()));
   const [toDate, setToDate] = useState(new Date(Date.now()));
-  const quizContext = useContext(QuizContext);
 
   const showPickerFromDate = () => {
     setIsPickerShowFromDate(true);
@@ -45,7 +45,46 @@ const BasicDetailForm = ({ navigation }) => {
     }
     console.log(value)
   };
-
+  // useFocusEffect(() => {
+  //   React.useCallback(() => {
+  //     setQuizDetails
+  //     //   Id: quiz.Basic_Details.Id,
+  //     //   No_ofQuestions: quiz.Basic_Details.No_ofQuestions === 0 ? "" : quiz.Basic_Details.No_ofQuestions.toString(),
+  //     //   category: quiz.Basic_Details.category,
+  //     //   quizName: quiz.Basic_Details.quizName,
+  //     //   Time: quiz.Basic_Details.Time === 0 ? "" : quiz.Basic_Details.Time.toString(),
+  //     //   TimePeriod: {
+  //     //     start: new Date(),
+  //     //     end: new Date(),
+  //     //   },
+  //     //   pointsPerQuestion: quiz.Basic_Details.pointsPerQuestion === 0 ? "" : quiz.Basic_Details.pointsPerQuestion.toString(),
+  //     //   logoUrl: quiz.Basic_Details.logoUrl,
+  //     // })
+  //   }, [])
+  // })
+  useFocusEffect(
+    React.useCallback(() => {
+      // Do something when the screen is focused.
+      alert('Home Screen was focused');
+      setQuizDetails({
+        Id: quiz.Basic_Details.Id,
+        No_ofQuestions: quiz.Basic_Details.No_ofQuestions === 0 ? "" : quiz.Basic_Details.No_ofQuestions.toString(),
+        category: quiz.Basic_Details.category,
+        quizName: quiz.Basic_Details.quizName,
+        Time: quiz.Basic_Details.Time === 0 ? "" : quiz.Basic_Details.Time.toString(),
+        TimePeriod: {
+          start: new Date(),
+          end: new Date(),
+        },
+        pointsPerQuestion: quiz.Basic_Details.pointsPerQuestion === 0 ? "" : quiz.Basic_Details.pointsPerQuestion.toString(),
+        logoUrl: quiz.Basic_Details.logoUrl,
+      })
+      return () => {
+        // Do something when the screen is unfocused
+        alert('Home Screen was unfocused');
+      };
+    }, [])
+  );
   const categories = [
     {
       text: "Sports",
@@ -68,7 +107,7 @@ const BasicDetailForm = ({ navigation }) => {
   const [progressPercent, setProgressPercent] = useState(0);
   const [saveLogoBtnClicked, setSaveLogoBtnClicked] = useState(false);
   const [saveLogoBtnClickedError, setSaveLogoBtnClickedError] = useState("");
-  let { submitQuizDetails }: any = useContext(QuizContext);
+  let { submitQuizDetails, quiz }: any = useContext(QuizContext);
   const integerRegExp = RegExp(/^[0-9]+$/);
   const [quizDetails, setQuizDetails] = useState({
     //   Id: quizDetailsProp.Id,
@@ -80,17 +119,17 @@ const BasicDetailForm = ({ navigation }) => {
     //   pointsPerQuestion: quizDetailsProp.pointsPerQuestion,
     //   logoUrl: quizDetailsProp.logoUrl,
     // });
-    Id: Date.now().toString(),
-    No_ofQuestions: "",
-    quizName: "",
-    Time: "",
+    Id: quiz.Basic_Details.Id,
+    No_ofQuestions: quiz.Basic_Details.No_ofQuestions === 0 ? "" : quiz.Basic_Details.No_ofQuestions.toString(),
+    category: quiz.Basic_Details.category,
+    quizName: quiz.Basic_Details.quizName,
+    Time: quiz.Basic_Details.Time === 0 ? "" : quiz.Basic_Details.Time.toString(),
     TimePeriod: {
       start: new Date(),
       end: new Date(),
     },
-    category: "",
-    pointsPerQuestion: "",
-    logoUrl: "",
+    pointsPerQuestion: quiz.Basic_Details.pointsPerQuestion === 0 ? "" : quiz.Basic_Details.pointsPerQuestion.toString(),
+    logoUrl: quiz.Basic_Details.logoUrl,
   });
 
   const [quizDetailsErrors, setQuizDetailsErrors] = useState({
@@ -171,7 +210,7 @@ const BasicDetailForm = ({ navigation }) => {
   const onSubmit = (): void => {
     let quizInfoErrors = quizDetailsErrors;
     let isQuizDetailsValid = true;
-    if (!saveLogoBtnClicked) {
+    if (!saveLogoBtnClicked && quiz.Basic_Details.logoUrl === "") {
       setSaveLogoBtnClickedError("Please click on save image");
       isQuizDetailsValid = false;
     }
