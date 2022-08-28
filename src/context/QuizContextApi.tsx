@@ -5,7 +5,7 @@ const QuizContext = createContext({});
 const QuizState = ({ children }: any) => {
   const [quiz, setQuiz] = useState({
     Basic_Details: {
-      Id: "",
+      Id: Date.now().toString(),
       No_ofQuestions: 0,
       category: "",
       quizName: "",
@@ -101,27 +101,29 @@ const QuizState = ({ children }: any) => {
       Questionare: [],
     });
   };
-  const editquiz = () => {
-    setQuiz({
-      Basic_Details: {
-        Id: quiz.Basic_Details.Id,
-        No_ofQuestions: quiz.Basic_Details.No_ofQuestions,
-        category: quiz.Basic_Details.category,
-        quizName: quiz.Basic_Details.quizName,
-        Time: quiz.Basic_Details.Time,
-        TimePeriod: {
-          start: new Date(),
-          end: new Date(),
-        },
-        pointsPerQuestion: quiz.Basic_Details.pointsPerQuestion,
-        logoUrl: "",
-      },
-      Questionare: [],
-    });
-  };
-
+  // const editquiz = () => {
+  //   setQuiz({
+  //     Basic_Details: {
+  //       Id: quiz.Basic_Details.Id,
+  //       No_ofQuestions: quiz.Basic_Details.No_ofQuestions,
+  //       category: quiz.Basic_Details.category,
+  //       quizName: quiz.Basic_Details.quizName,
+  //       Time: quiz.Basic_Details.Time,
+  //       TimePeriod: {
+  //         start: new Date(),
+  //         end: new Date(),
+  //       },
+  //       pointsPerQuestion: quiz.Basic_Details.pointsPerQuestion,
+  //       logoUrl: "",
+  //     },
+  //     Questionare: [],
+  //   });
+  // };
+  const getquestion = (index: number) => {
+    return quiz.Questionare[index]
+  }
   return (
-    <QuizContext.Provider value={{ quiz, submitQuizDetails, submitQuestion, clearquiz, editquiz }}>
+    <QuizContext.Provider value={{ quiz, submitQuizDetails, submitQuestion, clearquiz, }}>
       {children}
     </QuizContext.Provider>
   );
