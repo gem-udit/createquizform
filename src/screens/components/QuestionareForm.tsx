@@ -8,12 +8,9 @@ import {
   ScrollView,
 } from "react-native";
 import { QuizContext } from "../../context/QuizContextApi";
-const QuestionareForm = ({ route, navigation }) => {
-  useEffect(() => {
-    if (quiz.Questionare.length === quiz.Basic_Details.No_ofQuestions)
-      navigation.navigate("quizDetails")
-  })
-  const param = route.params;
+const QuestionareForm = ({ navigation, route }) => {
+  const { index, question } = route.params;
+  let { updateQuestionare }: any = useContext(QuizContext);
   const [quesAns, setQuesAns] = useState({
     Ques: "",
     CorrectAns: "",
@@ -35,6 +32,23 @@ const QuestionareForm = ({ route, navigation }) => {
     option2: "",
     option3: "",
   });
+  useEffect(() => {
+    console.log(index, question);
+    setQuesAns({
+      Ques: question.Ques,
+      CorrectAns: question.CorrectAns,
+    });
+    setIncorrectAnswers({
+      option1: question.Incorect_Ans[0],
+      option2: question.Incorect_Ans[1],
+      option3: question.Incorect_Ans[2],
+    });
+    if (
+      quiz.Basic_Details.No_ofQuestions === quiz.Questionare.length &&
+      index === -1
+    )
+      navigation.navigate("quizDetails");
+  });
   const handleQuesAnsChange = (name: string) => (text: string) => {
     setQuesAnsError({
       ...quesAnsError,
@@ -43,7 +57,6 @@ const QuestionareForm = ({ route, navigation }) => {
     setQuesAns({
       ...quesAns,
       [name]: text,
-
     });
   };
 
@@ -55,7 +68,6 @@ const QuestionareForm = ({ route, navigation }) => {
     setIncorrectAnswers({
       ...incorrectAnswers,
       [name]: text,
-
     });
   };
   let { submitQuestion, quiz }: any = useContext(QuizContext);
@@ -103,8 +115,21 @@ const QuestionareForm = ({ route, navigation }) => {
         Ques: "",
         CorrectAns: "",
       });
-      if (quiz.Questionare.length === quiz.Basic_Details.No_ofQuestions - 1)
-        navigation.navigate("quizDetails")
+      if (index !== -1) {
+        updateQuestionare(
+          {
+            Ques: quesAns.Ques,
+            CorrectAns: quesAns.CorrectAns,
+            Incorect_Ans: incorrectAnswers,
+          },
+          index
+        );
+        navigation.navigate("quizDetails");
+      } else if (
+        index === -1 &&
+        quiz.Questionare.length === quiz.Basic_Details.No_ofQuestions - 1
+      )
+        navigation.navigate("quizDetails");
     }
   };
   const resetQuestion = () => {
@@ -219,11 +244,15 @@ const QuestionareForm = ({ route, navigation }) => {
                   <Text style={styles.btnText}>Reset</Text>
                 </TouchableOpacity>
               </View>
-              <View style={styles.quizCardTextContainer}>
-                <Text style={styles.quizCardText}>
-                  Total Question Remaining{quiz.Basic_Details.No_ofQuestions - quiz.Questionare.length}
-                </Text>
-              </View>
+              {index === -1 && (
+                <View style={styles.quizCardTextContainer}>
+                  <Text style={styles.quizCardText}>
+                    Total Question Remaining
+                    {quiz.Basic_Details.No_ofQuestions -
+                      quiz.Questionare.length}
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
         </View>

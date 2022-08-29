@@ -832,7 +832,7 @@ const CreateQuizForm = () => {
                   your Quiz
                 </Text>
 
-                <QuizDetails quiz={quiz} />
+                {/* <QuizDetails quiz={quiz} /> */}
                 <View style={styles.btnContainer}>
                   <TouchableOpacity
                     style={[
