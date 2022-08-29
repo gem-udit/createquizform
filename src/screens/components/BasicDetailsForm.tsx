@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { QuizContext } from "../../context/QuizContextApi";
 import Dropdown from "react-native-element-dropdown/src/components/Dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -17,74 +16,17 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase/config";
-import Navigation from "../../Navigation";
 const BasicDetailForm = ({ navigation }) => {
   const [isPickerShowFromDate, setIsPickerShowFromDate] = useState(false);
   const [isPickerShowToDate, setIsPickerShowToDate] = useState(false);
   const [fromDate, setFromDate] = useState(new Date(Date.now()));
   const [toDate, setToDate] = useState(new Date(Date.now()));
-
-  const showPickerFromDate = () => {
-    setIsPickerShowFromDate(true);
-  };
-  const showPickerToDate = () => {
-    setIsPickerShowToDate(true);
-  };
-
-  const onChangeFromDate = (event: any, value: Date) => {
-    setFromDate(value);
-    if (Platform.OS === "android") {
-      setIsPickerShowFromDate(false);
-    }
-    console.log(value)
-  };
-  const onChangeToDate = (event: any, value: Date) => {
-    setToDate(value);
-    if (Platform.OS === "android") {
-      setIsPickerShowToDate(false);
-    }
-    console.log(value)
-  };
-  // useFocusEffect(() => {
-  //   React.useCallback(() => {
-  //     setQuizDetails
-  //     //   Id: quiz.Basic_Details.Id,
-  //     //   No_ofQuestions: quiz.Basic_Details.No_ofQuestions === 0 ? "" : quiz.Basic_Details.No_ofQuestions.toString(),
-  //     //   category: quiz.Basic_Details.category,
-  //     //   quizName: quiz.Basic_Details.quizName,
-  //     //   Time: quiz.Basic_Details.Time === 0 ? "" : quiz.Basic_Details.Time.toString(),
-  //     //   TimePeriod: {
-  //     //     start: new Date(),
-  //     //     end: new Date(),
-  //     //   },
-  //     //   pointsPerQuestion: quiz.Basic_Details.pointsPerQuestion === 0 ? "" : quiz.Basic_Details.pointsPerQuestion.toString(),
-  //     //   logoUrl: quiz.Basic_Details.logoUrl,
-  //     // })
-  //   }, [])
-  // })
-  useFocusEffect(
-    React.useCallback(() => {
-      // Do something when the screen is focused.
-      alert('Home Screen was focused');
-      setQuizDetails({
-        Id: quiz.Basic_Details.Id,
-        No_ofQuestions: quiz.Basic_Details.No_ofQuestions === 0 ? "" : quiz.Basic_Details.No_ofQuestions.toString(),
-        category: quiz.Basic_Details.category,
-        quizName: quiz.Basic_Details.quizName,
-        Time: quiz.Basic_Details.Time === 0 ? "" : quiz.Basic_Details.Time.toString(),
-        TimePeriod: {
-          start: new Date(),
-          end: new Date(),
-        },
-        pointsPerQuestion: quiz.Basic_Details.pointsPerQuestion === 0 ? "" : quiz.Basic_Details.pointsPerQuestion.toString(),
-        logoUrl: quiz.Basic_Details.logoUrl,
-      })
-      return () => {
-        // Do something when the screen is unfocused
-        alert('Home Screen was unfocused');
-      };
-    }, [])
-  );
+  const [isFocus, setIsFocus] = useState(false);
+  const [progressPercent, setProgressPercent] = useState(0);
+  const [saveLogoBtnClicked, setSaveLogoBtnClicked] = useState(false);
+  const [saveLogoBtnClickedError, setSaveLogoBtnClickedError] = useState("");
+  let { quiz, setQuiz }: any = useContext(QuizContext);
+  const integerRegExp = RegExp(/^[0-9]+$/);
   const categories = [
     {
       text: "Sports",
@@ -103,34 +45,76 @@ const BasicDetailForm = ({ navigation }) => {
       value: "Other",
     },
   ];
-  const [isFocus, setIsFocus] = useState(false);
-  const [progressPercent, setProgressPercent] = useState(0);
-  const [saveLogoBtnClicked, setSaveLogoBtnClicked] = useState(false);
-  const [saveLogoBtnClickedError, setSaveLogoBtnClickedError] = useState("");
-  let { submitQuizDetails, quiz }: any = useContext(QuizContext);
-  const integerRegExp = RegExp(/^[0-9]+$/);
-  const [quizDetails, setQuizDetails] = useState({
-    //   Id: quizDetailsProp.Id,
-    //   No_ofQuestions: quizDetailsProp.No_ofQuestions,
-    //   quizName: quizDetailsProp.quizName,
-    //   Time: quizDetailsProp.Time,
-    //   TimePeriod: quizDetailsProp.TimePeriod,
-    //   category: quizDetailsProp.category,
-    //   pointsPerQuestion: quizDetailsProp.pointsPerQuestion,
-    //   logoUrl: quizDetailsProp.logoUrl,
-    // });
-    Id: quiz.Basic_Details.Id,
-    No_ofQuestions: quiz.Basic_Details.No_ofQuestions === 0 ? "" : quiz.Basic_Details.No_ofQuestions.toString(),
-    category: quiz.Basic_Details.category,
-    quizName: quiz.Basic_Details.quizName,
-    Time: quiz.Basic_Details.Time === 0 ? "" : quiz.Basic_Details.Time.toString(),
-    TimePeriod: {
-      start: new Date(),
-      end: new Date(),
-    },
-    pointsPerQuestion: quiz.Basic_Details.pointsPerQuestion === 0 ? "" : quiz.Basic_Details.pointsPerQuestion.toString(),
-    logoUrl: quiz.Basic_Details.logoUrl,
-  });
+
+  const showPickerFromDate = () => {
+    setIsPickerShowFromDate(true);
+  };
+  const showPickerToDate = () => {
+    setIsPickerShowToDate(true);
+  };
+
+  const onChangeFromDate = (event: any, value: Date) => {
+    setFromDate(value);
+    setQuiz({
+      ...quiz,
+      Basic_Details: {
+        ...quiz.Basic_Details,
+        TimePeriod: {
+          ...quiz.Basic_Details.TimePeriod,
+          start: value.toString(),
+        },
+      },
+    });
+    if (Platform.OS === "android") {
+      setIsPickerShowFromDate(false);
+    }
+  };
+  const onChangeToDate = (event: any, value: Date) => {
+    setToDate(value);
+    setQuiz({
+      ...quiz,
+      Basic_Details: {
+        ...quiz.Basic_Details,
+        TimePeriod: {
+          ...quiz.Basic_Details.TimePeriod,
+          end: value.toString(),
+        },
+      },
+    });
+    if (Platform.OS === "android") {
+      setIsPickerShowToDate(false);
+    }
+  };
+
+  // const [quizDetails, setQuizDetails] = useState({
+  //   //   Id: quizDetailsProp.Id,
+  //   //   No_ofQuestions: quizDetailsProp.No_ofQuestions,
+  //   //   quizName: quizDetailsProp.quizName,
+  //   //   Time: quizDetailsProp.Time,
+  //   //   TimePeriod: quizDetailsProp.TimePeriod,
+  //   //   category: quizDetailsProp.category,
+  //   //   pointsPerQuestion: quizDetailsProp.pointsPerQuestion,
+  //   //   logoUrl: quizDetailsProp.logoUrl,
+  //   // });
+  //   Id: quiz.Basic_Details.Id,
+  //   No_ofQuestions:
+  //     quiz.Basic_Details.No_ofQuestions === 0
+  //       ? ""
+  //       : quiz.Basic_Details.No_ofQuestions.toString(),
+  //   category: quiz.Basic_Details.category,
+  //   quizName: quiz.Basic_Details.quizName,
+  //   Time:
+  //     quiz.Basic_Details.Time === 0 ? "" : quiz.Basic_Details.Time.toString(),
+  //   TimePeriod: {
+  //     start: new Date(),
+  //     end: new Date(),
+  //   },
+  //   pointsPerQuestion:
+  //     quiz.Basic_Details.pointsPerQuestion === 0
+  //       ? ""
+  //       : quiz.Basic_Details.pointsPerQuestion.toString(),
+  //   logoUrl: quiz.Basic_Details.logoUrl,
+  // });
 
   const [quizDetailsErrors, setQuizDetailsErrors] = useState({
     No_ofQuestions: "",
@@ -146,20 +130,40 @@ const BasicDetailForm = ({ navigation }) => {
       ...quizDetailsErrors,
       [name]: "",
     });
-    if (name === "category") {
-      setQuizDetails({
-        ...quizDetails,
-        [name]: fieldData.value,
+
+    if (
+      name === "No_ofQuestions" ||
+      name === "Time" ||
+      name === "pointsPerQuestion"
+    ) {
+      setQuiz({
+        ...quiz,
+        Basic_Details: {
+          ...quiz.Basic_Details,
+          [name]: Number(fieldData),
+        },
+      });
+    } else if (name === "category") {
+      setQuiz({
+        ...quiz,
+        Basic_Details: {
+          ...quiz.Basic_Details,
+          [name]: fieldData.value,
+        },
       });
     } else {
-      setQuizDetails({
-        ...quizDetails,
-        [name]: fieldData,
+      setQuiz({
+        ...quiz,
+        Basic_Details: {
+          ...quiz.Basic_Details,
+          [name]: fieldData,
+        },
       });
     }
   };
   const handleImgaeUploadClick = async () => {
     setSaveLogoBtnClickedError("");
+    setSaveLogoBtnClicked(false);
     let systemImage = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -167,9 +171,12 @@ const BasicDetailForm = ({ navigation }) => {
       quality: 1,
     });
     if (!systemImage.cancelled) {
-      setQuizDetails({
-        ...quizDetails,
-        logoUrl: systemImage.uri,
+      setQuiz({
+        ...quiz,
+        Basic_Details: {
+          ...quiz.Basic_Details,
+          logoUrl: systemImage.uri,
+        },
       });
     }
     setQuizDetailsErrors({
@@ -179,7 +186,12 @@ const BasicDetailForm = ({ navigation }) => {
   };
   const saveQuizLogo = async () => {
     setSaveLogoBtnClicked(true);
-    const uploadUri = quizDetails.logoUrl;
+    setQuizDetailsErrors({
+      ...quizDetailsErrors,
+      logoUrl: "",
+    });
+    setSaveLogoBtnClickedError("");
+    const uploadUri = quiz.Basic_Details.logoUrl;
     let filename = uploadUri.substring(uploadUri.lastIndexOf("/") + 1);
     const response = await (await fetch(uploadUri)).blob();
     const storageRef = ref(storage, `files/${filename}`);
@@ -199,9 +211,12 @@ const BasicDetailForm = ({ navigation }) => {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setQuizDetails({
-            ...quizDetails,
-            logoUrl: downloadURL,
+          setQuiz({
+            ...quiz,
+            Basic_Details: {
+              ...quiz.Basic_Details,
+              logoUrl: downloadURL,
+            },
           });
         });
       }
@@ -210,65 +225,65 @@ const BasicDetailForm = ({ navigation }) => {
   const onSubmit = (): void => {
     let quizInfoErrors = quizDetailsErrors;
     let isQuizDetailsValid = true;
-    if (!saveLogoBtnClicked && quiz.Basic_Details.logoUrl === "") {
+    if (!saveLogoBtnClicked) {
       setSaveLogoBtnClickedError("Please click on save image");
       isQuizDetailsValid = false;
     }
-    if (quizDetails.quizName === "") {
+    if (quiz.Basic_Details.quizName === "") {
       quizInfoErrors.quizName = "Quiz Name is Required";
       isQuizDetailsValid = false;
     }
-    if (quizDetails.category === "") {
+    if (quiz.Basic_Details.category === "") {
       quizInfoErrors.category = "Quiz Category is Required";
       isQuizDetailsValid = false;
     }
-    if (quizDetails.Time === "") {
+    if (quiz.Basic_Details.Time === "") {
       quizInfoErrors.Time = "Quiz Time is Required";
       isQuizDetailsValid = false;
-    } else if (!integerRegExp.test(quizDetails.Time)) {
+    } else if (!integerRegExp.test(quiz.Basic_Details.Time)) {
       quizInfoErrors.Time = "Quiz Time should be integer";
       isQuizDetailsValid = false;
     } else {
-      if (Number(quizDetails.Time) < 10 || Number(quizDetails.Time) > 30) {
+      if (quiz.Basic_Details.Time < 10 || quiz.Basic_Details.Time > 30) {
         quizInfoErrors.Time = "Quiz Time should be between 10 and 30 minutes";
         isQuizDetailsValid = false;
       }
     }
-    if (quizDetails.pointsPerQuestion === "") {
+    if (quiz.Basic_Details.pointsPerQuestion === "") {
       quizInfoErrors.pointsPerQuestion = "Points per question is Required";
       isQuizDetailsValid = false;
-    } else if (!integerRegExp.test(quizDetails.pointsPerQuestion)) {
+    } else if (!integerRegExp.test(quiz.Basic_Details.pointsPerQuestion)) {
       quizInfoErrors.pointsPerQuestion =
         "Points per question should be integer";
       isQuizDetailsValid = false;
     } else {
       if (
-        Number(quizDetails.pointsPerQuestion) < 10 ||
-        Number(quizDetails.pointsPerQuestion) > 100
+        quiz.Basic_Details.pointsPerQuestion < 10 ||
+        quiz.Basic_Details.pointsPerQuestion > 100
       ) {
         quizInfoErrors.pointsPerQuestion =
           "Points per question should be between 10 and 100";
         isQuizDetailsValid = false;
       }
     }
-    if (quizDetails.No_ofQuestions === "") {
+    if (quiz.Basic_Details.No_ofQuestions === "") {
       quizInfoErrors.No_ofQuestions = "Number of question is Required";
       isQuizDetailsValid = false;
-    } else if (!integerRegExp.test(quizDetails.No_ofQuestions)) {
+    } else if (!integerRegExp.test(quiz.Basic_Details.No_ofQuestions)) {
       quizInfoErrors.No_ofQuestions = "Number of question should be integer";
       isQuizDetailsValid = false;
     }
     // } else {
     //   if (
-    //     Number(quizDetails.No_ofQuestions) < 10 ||
-    //     Number(quizDetails.No_ofQuestions) > 20
+    //     quiz.Basic_Details.No_ofQuestions < 10 ||
+    //     quiz.Basic_Details.No_ofQuestions > 20
     //   ) {
     //     quizInfoErrors.No_ofQuestions =
     //       "Number of question should be between 10 and 20";
     //     isQuizDetailsValid = false;
     //   }
     // }
-    if (quizDetails.logoUrl === "") {
+    if (quiz.Basic_Details.logoUrl === "") {
       quizInfoErrors.logoUrl = "Logo Url is Required";
       isQuizDetailsValid = false;
     }
@@ -282,31 +297,16 @@ const BasicDetailForm = ({ navigation }) => {
       category: quizInfoErrors.category,
     });
     if (isQuizDetailsValid) {
-      submitQuizDetails(quizDetails);
-      setQuizDetails({
-        Id: "",
-        No_ofQuestions: "",
-        quizName: "",
-        Time: "",
-        TimePeriod: {
-          start: new Date(),
-          end: new Date(),
-        },
-        pointsPerQuestion: "",
-        logoUrl: "",
-        category: "",
-      });
+      if (quiz.Basic_Details.No_ofQuestions === quiz.Questionare.length)
+        navigation.navigate("quizDetails");
       navigation.navigate("Questions", {
-        quesAns: {
+        index: -1,
+        question: {
           Ques: "",
           CorrectAns: "",
+          Incorect_Ans: ["", "", ""],
         },
-        incorrectAns: {
-          option1: "",
-          option2: "",
-          option3: "",
-        },
-      })
+      });
     }
   };
   return (
@@ -321,11 +321,11 @@ const BasicDetailForm = ({ navigation }) => {
               <View style={styles.quizCardTextContainer}>
                 <Text style={styles.quizCardText}>Fill Quiz Basic Details</Text>
               </View>
-              {quizDetails.logoUrl.length !== 0 && (
+              {quiz.Basic_Details.logoUrl.length !== 0 && (
                 <View style={styles.imageContainer}>
                   <Image
                     style={styles.quizLogo}
-                    source={{ uri: quizDetails.logoUrl }}
+                    source={{ uri: quiz.Basic_Details.logoUrl }}
                   ></Image>
                   {saveLogoBtnClicked && progressPercent < 100 && (
                     <Text>Uploading...</Text>
@@ -359,7 +359,7 @@ const BasicDetailForm = ({ navigation }) => {
                 <TextInput
                   placeholder="Enter Quiz Name"
                   onChangeText={onChangeQuizDetails("quizName")}
-                  value={quizDetails.quizName}
+                  value={quiz.Basic_Details.quizName}
                   style={styles.textInputStyling}
                 />
                 {quizDetailsErrors.quizName !== "" && (
@@ -374,7 +374,7 @@ const BasicDetailForm = ({ navigation }) => {
                   selectedTextStyle={styles.selectedTextStyle}
                   iconStyle={styles.iconStyle}
                   data={categories}
-                  value={quizDetails.category}
+                  value={quiz.Basic_Details.category}
                   labelField={"text"}
                   valueField={"value"}
                   placeholder={!isFocus ? "Select category" : "..."}
@@ -391,7 +391,7 @@ const BasicDetailForm = ({ navigation }) => {
                   <View style={{ marginTop: 10 }}>
                     <Text>Select starting date of quiz (Touch below)</Text>
                     <DateTimePicker
-                      value={fromDate}
+                      value={new Date(quiz.Basic_Details.TimePeriod.start)}
                       mode={"date"}
                       display={"default"}
                       onChange={onChangeFromDate}
@@ -399,7 +399,7 @@ const BasicDetailForm = ({ navigation }) => {
                     />
                     <Text>Select expiry date of quiz (Touch Below)</Text>
                     <DateTimePicker
-                      value={toDate}
+                      value={new Date(quiz.Basic_Details.TimePeriod.end)}
                       mode={"date"}
                       display={"compact"}
                       onChange={onChangeToDate}
@@ -412,7 +412,7 @@ const BasicDetailForm = ({ navigation }) => {
                   <View>
                     <View style={styles.pickedDateContainer}>
                       <Text style={styles.pickedDate}>
-                        {fromDate.toDateString()}
+                        {quiz.Basic_Details.TimePeriod.start}
                       </Text>
                     </View>
                     {!isPickerShowFromDate && (
@@ -426,7 +426,7 @@ const BasicDetailForm = ({ navigation }) => {
                     )}
                     {isPickerShowFromDate && (
                       <DateTimePicker
-                        value={fromDate}
+                        value={new Date(quiz.Basic_Details.TimePeriod.start)}
                         mode={"date"}
                         display={"default"}
                         is24Hour={true}
@@ -436,7 +436,7 @@ const BasicDetailForm = ({ navigation }) => {
                     )}
                     <View style={styles.pickedDateContainer}>
                       <Text style={styles.pickedDate}>
-                        {toDate.toDateString()}
+                        {quiz.Basic_Details.TimePeriod.end}
                       </Text>
                     </View>
                     {!isPickerShowToDate && (
@@ -451,7 +451,7 @@ const BasicDetailForm = ({ navigation }) => {
 
                     {isPickerShowToDate && (
                       <DateTimePicker
-                        value={toDate}
+                        value={new Date(quiz.Basic_Details.TimePeriod.end)}
                         mode={"date"}
                         display={"default"}
                         is24Hour={true}
@@ -465,8 +465,13 @@ const BasicDetailForm = ({ navigation }) => {
                 <TextInput
                   placeholder="Enter Quiz Duration (in minutes)"
                   onChangeText={onChangeQuizDetails("Time")}
-                  value={quizDetails.Time}
+                  value={
+                    quiz.Basic_Details.Time === 0
+                      ? ""
+                      : quiz.Basic_Details.Time.toString()
+                  }
                   style={styles.textInputStyling}
+                  keyboardType={"numeric"}
                 />
                 {quizDetailsErrors.Time.length !== 0 && (
                   <Text style={styles.incorrectFeedback}>
@@ -477,8 +482,13 @@ const BasicDetailForm = ({ navigation }) => {
                 <TextInput
                   placeholder="Enter Points per question"
                   onChangeText={onChangeQuizDetails("pointsPerQuestion")}
-                  value={quizDetails.pointsPerQuestion}
+                  value={
+                    quiz.Basic_Details.pointsPerQuestion === 0
+                      ? ""
+                      : quiz.Basic_Details.pointsPerQuestion.toString()
+                  }
                   style={styles.textInputStyling}
+                  keyboardType={"numeric"}
                 />
                 {quizDetailsErrors.pointsPerQuestion.length !== 0 && (
                   <Text style={styles.incorrectFeedback}>
@@ -489,8 +499,13 @@ const BasicDetailForm = ({ navigation }) => {
                 <TextInput
                   placeholder="Enter Total Questions"
                   onChangeText={onChangeQuizDetails("No_ofQuestions")}
-                  value={quizDetails.No_ofQuestions}
+                  value={
+                    quiz.Basic_Details.No_ofQuestions === 0
+                      ? ""
+                      : quiz.Basic_Details.No_ofQuestions.toString()
+                  }
                   style={styles.textInputStyling}
+                  keyboardType={"numeric"}
                 />
                 {quizDetailsErrors.No_ofQuestions.length !== 0 && (
                   <Text style={styles.incorrectFeedback}>

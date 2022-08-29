@@ -1,10 +1,17 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { QuizContext } from "../../context/QuizContextApi";
 import { db } from "../../firebase/config";
 import { collection, addDoc } from "firebase/firestore";
 const QuizDetails = ({ navigation }) => {
-  const { quiz, clearquiz, editquiz }: any = useContext(QuizContext);
+  const { quiz, clearquiz }: any = useContext(QuizContext);
 
   const submitQuiz = async () => {
     try {
@@ -12,17 +19,17 @@ const QuizDetails = ({ navigation }) => {
     } catch (err) {
       console.log(err);
     }
-    navigation.navigate("quizSubmitted")
+    navigation.navigate("quizSubmitted");
   };
 
   const clearquizdetails = () => {
-    clearquiz()
-    navigation.navigate("BasicDetails")
-  }
+    clearquiz();
+    navigation.navigate("BasicDetails");
+  };
 
   const edit = () => {
-    navigation.navigate("BasicDetails")
-  }
+    navigation.navigate("BasicDetails");
+  };
 
   return (
     <View style={styles.container}>
@@ -32,14 +39,13 @@ const QuizDetails = ({ navigation }) => {
       <ScrollView>
         <View style={styles.completedFormContainer}>
           <Text style={styles.completedFormText}>
-            Quiz Details and Questions filled Successfully. Review the
-            details and click on Submit Button at bottom of screen to save
-            your Quiz
+            Quiz Details and Questions filled Successfully. Review the details
+            and click on Submit Button at bottom of screen to save your Quiz
           </Text>
           <View style={styles.quizDetailsQuestionsContainer}>
             <View style={styles.basicDetailContainer}>
               <Text style={styles.quizDetailsHeading}>Quiz Basic Details</Text>
-              {quiz.Basic_Details.logoUrl !== "" &&
+              {quiz.Basic_Details.logoUrl !== "" && (
                 <View style={styles.quizDetailsQuizLogoContainer}>
                   <Image
                     style={styles.quizDetailsQuizLogo}
@@ -49,8 +55,10 @@ const QuizDetails = ({ navigation }) => {
                     style={{ bottom: "12%", left: "50%" }}
                     onPress={edit}
                   >
-                    <Text>Edit</Text></TouchableOpacity>
-                </View>}
+                    <Text>Edit</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
               <View style={styles.basicDetailRow}>
                 <Text style={styles.basicDetailTitle}>Quiz Title</Text>
                 <Text style={styles.basicDetailData}>
@@ -59,18 +67,26 @@ const QuizDetails = ({ navigation }) => {
               </View>
               <View style={styles.basicDetailRow}>
                 <Text style={styles.basicDetailTitle}>Quiz From Date</Text>
-                <Text style={styles.basicDetailData}>{quiz.Basic_Details.TimePeriod.start}</Text>
+                <Text style={styles.basicDetailData}>
+                  {quiz.Basic_Details.TimePeriod.start}
+                </Text>
               </View>
               <View style={styles.basicDetailRow}>
                 <Text style={styles.basicDetailTitle}>Quiz To Date</Text>
-                <Text style={styles.basicDetailData}>{quiz.Basic_Details.TimePeriod.end}</Text>
+                <Text style={styles.basicDetailData}>
+                  {quiz.Basic_Details.TimePeriod.end}
+                </Text>
               </View>
               <View style={styles.basicDetailRow}>
                 <Text style={styles.basicDetailTitle}>Quiz Duration</Text>
-                <Text style={styles.basicDetailData}>{quiz.Basic_Details.Time}</Text>
+                <Text style={styles.basicDetailData}>
+                  {quiz.Basic_Details.Time}
+                </Text>
               </View>
               <View style={styles.basicDetailRow}>
-                <Text style={styles.basicDetailTitle}>Points Per Questioons</Text>
+                <Text style={styles.basicDetailTitle}>
+                  Points Per Questioons
+                </Text>
                 <Text style={styles.basicDetailData}>
                   {quiz.Basic_Details.pointsPerQuestion}
                 </Text>
@@ -89,20 +105,26 @@ const QuizDetails = ({ navigation }) => {
               </View>
               <Text style={styles.quizDetailsHeading}>Quiz Questions</Text>
               {quiz.Questionare.map((question: any, index: number) => (
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: "row" }}>
                   <View style={styles.questionareContainer}>
                     <View>
-                      <Text style={styles.questionareTitle}>Question {index + 1}</Text>
+                      <Text style={styles.questionareTitle}>
+                        Question {index + 1}
+                      </Text>
                       <Text style={styles.questionareData}>
                         <Text>{question.Ques}</Text>
                       </Text>
                     </View>
                     <View>
                       <Text style={styles.questionareTitle}>Answer</Text>
-                      <Text style={styles.questionareData}>{question.CorrectAns}</Text>
+                      <Text style={styles.questionareData}>
+                        {question.CorrectAns}
+                      </Text>
                     </View>
                     <View>
-                      <Text style={styles.questionareTitle}>Incorrect Answer</Text>
+                      <Text style={styles.questionareTitle}>
+                        Incorrect Answer
+                      </Text>
                       {question.Incorect_Ans.map(
                         (incorrectOption: String, index: number) => (
                           <Text style={styles.questionareData}>
@@ -112,15 +134,26 @@ const QuizDetails = ({ navigation }) => {
                       )}
                     </View>
                   </View>
+                  {/* { navigation.navigate("Questions") } */}
                   <View style={{ flexDirection: "column" }}>
                     <TouchableOpacity
-                      onPress={() => { navigation.navigate("Questions") }}><Text>edit</Text></TouchableOpacity>
-                    <TouchableOpacity><Text>delete</Text></TouchableOpacity></View>
+                      onPress={() =>
+                        navigation.navigate("Questions", {
+                          index: index,
+                          question: question,
+                        })
+                      }
+                    >
+                      <Text>Edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <Text>Delete</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               ))}
             </View>
             <View style={styles.btnContainer}>
-
               <TouchableOpacity
                 style={[
                   styles.submitBtnBackground,
@@ -144,7 +177,7 @@ const QuizDetails = ({ navigation }) => {
         </View>
       </ScrollView>
     </View>
-  )
+  );
 };
 const styles = StyleSheet.create({
   container: {
@@ -233,7 +266,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 12,
     borderRadius: 20,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   quizDetailsQuizLogo: {
     width: 100,
