@@ -74,34 +74,28 @@ const QuizState = ({ children }: any) => {
       Questionare: [],
     });
   };
-  const updateQuestionare = (question:any,updatedIndex:number) =>{
+  const updateQuestionare = (question: any, updatedIndex: number) => {
     setQuiz({
       ...quiz,
       Questionare: [
-        quiz.Questionare.map((quizQuestion:any,index:number) =>{
+        quiz.Questionare.map((quizQuestion: any, index: number) => {
           index === updatedIndex ? question : quizQuestion
         })
       ],
     })
   }
-  // const editquiz = () => {
-  //   setQuiz({
-  //     Basic_Details: {
-  //       Id: quiz.Basic_Details.Id,
-  //       No_ofQuestions: quiz.Basic_Details.No_ofQuestions,
-  //       category: quiz.Basic_Details.category,
-  //       quizName: quiz.Basic_Details.quizName,
-  //       Time: quiz.Basic_Details.Time,
-  //       TimePeriod: {
-  //         start: new Date(),
-  //         end: new Date(),
-  //       },
-  //       pointsPerQuestion: quiz.Basic_Details.pointsPerQuestion,
-  //       logoUrl: "",
-  //     },
-  //     Questionare: [],
-  //   });
-  // };
+  const deletequiz = (id: any) => {
+    quiz.Questionare.splice(id, 1);
+    setQuiz({
+      ...quiz,
+      Basic_Details: {
+        ...quiz.Basic_Details,
+        No_ofQuestions: quiz.Questionare.length,
+
+      }
+
+    })
+  };
   return (
     <QuizContext.Provider
       value={{
@@ -110,7 +104,8 @@ const QuizState = ({ children }: any) => {
         submitQuestion,
         clearquiz,
         setQuiz,
-        updateQuestionare
+        updateQuestionare,
+        deletequiz
       }}
     >
       {children}
