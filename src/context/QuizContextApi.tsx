@@ -47,7 +47,7 @@ const QuizState = ({ children }: any) => {
         {
           Ques: quesAns.Ques,
           CorrectAns: quesAns.CorrectAns,
-          Incorect_Ans: [
+          Incorrect_Ans: [
             incorrectAnswers.option1,
             incorrectAnswers.option2,
             incorrectAnswers.option3,
@@ -75,13 +75,13 @@ const QuizState = ({ children }: any) => {
     });
   };
   const updateQuestionare = (question: any, updatedIndex: number) => {
+    let updatedQuestions = [];
+    quiz.Questionare.map((quizQuestion: any, index: number) => {
+      index === updatedIndex ? updatedQuestions.push(question) : updatedQuestions.push(quizQuestion)
+    })
     setQuiz({
       ...quiz,
-      Questionare: [
-        quiz.Questionare.map((quizQuestion: any, index: number) => {
-          index === updatedIndex ? question : quizQuestion
-        })
-      ],
+      Questionare: updatedQuestions,
     })
   }
   const deletequiz = (id: any) => {
@@ -91,9 +91,7 @@ const QuizState = ({ children }: any) => {
       Basic_Details: {
         ...quiz.Basic_Details,
         No_ofQuestions: quiz.Questionare.length,
-
       }
-
     })
   };
   return (
