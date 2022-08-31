@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,8 +12,11 @@ import { db } from "../../firebase/config";
 import { collection, addDoc } from "firebase/firestore";
 const QuizDetails = ({ navigation, }) => {
   const { quiz, clearquiz, deletequiz }: any = useContext(QuizContext);
-  console.log(quiz)
-
+  //console.log(quiz)
+  useEffect(()=>{
+    console.log(quiz);
+    console.log("------------");
+  },[navigation,quiz])
   const handleRemoveItem = async (id: Object) => {
     deletequiz(id);
   }
@@ -129,7 +132,7 @@ const QuizDetails = ({ navigation, }) => {
                       <Text style={styles.questionareTitle}>
                         Incorrect Answer
                       </Text>
-                      {question.Incorect_Ans.map(
+                      {question.Incorrect_Ans.map(
                         (incorrectOption: String, index: number) => (
                           <Text style={styles.questionareData} key={index}>
                             {index + 1}.{incorrectOption}
@@ -138,7 +141,6 @@ const QuizDetails = ({ navigation, }) => {
                       )}
                     </View>
                   </View>
-                  {/* { navigation.navigate("Questions") } */}
                   <View style={{ flexDirection: "column" }}>
                     <TouchableOpacity
                       onPress={() =>

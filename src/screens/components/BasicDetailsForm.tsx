@@ -2,9 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { QuizContext } from "../../context/QuizContextApi";
 import Dropdown from "react-native-element-dropdown/src/components/Dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import DatePickerCalendar from 'react-native-calendarview-datepicker';
-import Calendar from 'react-native-calendar-datepicker';
-// import DatePicker from 'react-native-modern-datepicker';
 import {
   View,
   Text,
@@ -19,14 +16,9 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase/config";
-import moment from "moment";
 const BasicDetailForm = ({ navigation }) => {
   const [isPickerShowFromDate, setIsPickerShowFromDate] = useState(false);
   const [isPickerShowToDate, setIsPickerShowToDate] = useState(false);
-  const [fromDate, setFromDate] = useState(new Date(Date.now()));
-  const [toDate, setToDate] = useState(new Date(Date.now()));
-  const [date, setDate] = useState(moment());
-  const [state, setState] = useState(moment());
   const [isFocus, setIsFocus] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
   const [saveLogoBtnClicked, setSaveLogoBtnClicked] = useState(false);
@@ -60,7 +52,6 @@ const BasicDetailForm = ({ navigation }) => {
   };
 
   const onChangeFromDate = (event: any, value: Date) => {
-    setFromDate(value);
     setQuiz({
       ...quiz,
       Basic_Details: {
@@ -76,7 +67,6 @@ const BasicDetailForm = ({ navigation }) => {
     }
   };
   const onChangeToDate = (event: any, value: Date) => {
-    setToDate(value);
     setQuiz({
       ...quiz,
       Basic_Details: {
@@ -280,7 +270,7 @@ const BasicDetailForm = ({ navigation }) => {
         question: {
           Ques: "",
           CorrectAns: "",
-          Incorect_Ans: ["", "", ""],
+          Incorrect_Ans: ["", "", ""],
         },
       });
     }
@@ -296,18 +286,6 @@ const BasicDetailForm = ({ navigation }) => {
             <View style={styles.quizCard}>
               <View style={styles.quizCardTextContainer}>
                 <Text style={styles.quizCardText}>Fill Quiz Basic Details</Text>
-                {/* <DatePicker
-                  current="2020-07-13"
-                  minimumDate="2020-02-17"
-                  maximumDate="2020-07-25"
-                /> */}
-                {/* <Calendar
-                  onChange={(date) => setState(date)}
-                  selected={state.date}
-                  minDate={moment().startOf('day')}
-                  maxDate={moment().add(10, 'years').startOf('day')}
-                /> */}
-                {/* <DatePickerCalendar date={date} onChange={(selectedDate) => setDate(selectedDate)} /> */}
               </View>
               {quiz.Basic_Details.logoUrl.length !== 0 && (
                 <View style={styles.imageContainer}>

@@ -33,26 +33,25 @@ const QuestionareForm = ({ navigation, route }) => {
     option3: "",
   });
   useEffect(() => {
-    // console.log(question);
-
-    // setQuesAns({
-    //   Ques: question.Ques,
-    //   CorrectAns: question.CorrectAns,
-    // });
-    // setIncorrectAnswers({
-    //   option1: question.Incorect_Ans[0],
-    //   option2: question.Incorect_Ans[1],
-    //   option3: question.Incorect_Ans[2],
-    // });
+    console.log(question);
+    setQuesAns({
+      Ques: question.Ques,
+      CorrectAns: question.CorrectAns,
+    });
+    setIncorrectAnswers({
+      option1: question.Incorrect_Ans[0],
+      option2: question.Incorrect_Ans[1],
+      option3: question.Incorrect_Ans[2],
+    });
     if (
       quiz.Basic_Details.No_ofQuestions === quiz.Questionare.length &&
       index === -1
     )
       navigation.navigate("quizDetails");
 
-  });
+  },[navigation,question]);
   const handleQuesAnsChange = (name: string) => (text: string) => {
-    console.log(text)
+    //console.log(text)
     setQuesAnsError({
       ...quesAnsError,
       [name]: "",
@@ -123,7 +122,7 @@ const QuestionareForm = ({ navigation, route }) => {
           {
             Ques: quesAns.Ques,
             CorrectAns: quesAns.CorrectAns,
-            Incorect_Ans: incorrectAnswers,
+            Incorrect_Ans: [incorrectAnswers.option1,incorrectAnswers.option2,incorrectAnswers.option3],
           },
           index
         );
