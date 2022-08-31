@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -10,9 +10,13 @@ import {
 import { QuizContext } from "../../context/QuizContextApi";
 import { db } from "../../firebase/config";
 import { collection, addDoc } from "firebase/firestore";
-const QuizDetails = ({ navigation }) => {
-  const { quiz, clearquiz }: any = useContext(QuizContext);
+const QuizDetails = ({ navigation, }) => {
+  const { quiz, clearquiz, deletequiz }: any = useContext(QuizContext);
+  console.log(quiz)
 
+  const handleRemoveItem = async (id: Object) => {
+    deletequiz(id);
+  }
   const submitQuiz = async () => {
     try {
       await addDoc(collection(db, "QuizData"), quiz);
@@ -105,7 +109,7 @@ const QuizDetails = ({ navigation }) => {
               </View>
               <Text style={styles.quizDetailsHeading}>Quiz Questions</Text>
               {quiz.Questionare.map((question: any, index: number) => (
-                <View style={{ flexDirection: "row" }}>
+                <View style={{ flexDirection: "row" }} key={index}>
                   <View style={styles.questionareContainer}>
                     <View>
                       <Text style={styles.questionareTitle}>
@@ -127,7 +131,7 @@ const QuizDetails = ({ navigation }) => {
                       </Text>
                       {question.Incorect_Ans.map(
                         (incorrectOption: String, index: number) => (
-                          <Text style={styles.questionareData}>
+                          <Text style={styles.questionareData} key={index}>
                             {index + 1}.{incorrectOption}
                           </Text>
                         )
@@ -146,9 +150,10 @@ const QuizDetails = ({ navigation }) => {
                     >
                       <Text>Edit</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
-                      <Text>Delete</Text>
-                    </TouchableOpacity>
+                    {quiz.Questionare.length > 1 ?
+                      (<TouchableOpacity onPress={() => handleRemoveItem(index)}>
+                        <Text>Delete</Text>
+                      </TouchableOpacity>) : (<></>)}
                   </View>
                 </View>
               ))}

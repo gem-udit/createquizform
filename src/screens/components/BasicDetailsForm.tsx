@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { QuizContext } from "../../context/QuizContextApi";
 import Dropdown from "react-native-element-dropdown/src/components/Dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import DatePickerCalendar from 'react-native-calendarview-datepicker';
+import Calendar from 'react-native-calendar-datepicker';
+// import DatePicker from 'react-native-modern-datepicker';
 import {
   View,
   Text,
@@ -16,11 +19,14 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase/config";
+import moment from "moment";
 const BasicDetailForm = ({ navigation }) => {
   const [isPickerShowFromDate, setIsPickerShowFromDate] = useState(false);
   const [isPickerShowToDate, setIsPickerShowToDate] = useState(false);
   const [fromDate, setFromDate] = useState(new Date(Date.now()));
   const [toDate, setToDate] = useState(new Date(Date.now()));
+  const [date, setDate] = useState(moment());
+  const [state, setState] = useState(moment());
   const [isFocus, setIsFocus] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
   const [saveLogoBtnClicked, setSaveLogoBtnClicked] = useState(false);
@@ -85,36 +91,6 @@ const BasicDetailForm = ({ navigation }) => {
       setIsPickerShowToDate(false);
     }
   };
-
-  // const [quizDetails, setQuizDetails] = useState({
-  //   //   Id: quizDetailsProp.Id,
-  //   //   No_ofQuestions: quizDetailsProp.No_ofQuestions,
-  //   //   quizName: quizDetailsProp.quizName,
-  //   //   Time: quizDetailsProp.Time,
-  //   //   TimePeriod: quizDetailsProp.TimePeriod,
-  //   //   category: quizDetailsProp.category,
-  //   //   pointsPerQuestion: quizDetailsProp.pointsPerQuestion,
-  //   //   logoUrl: quizDetailsProp.logoUrl,
-  //   // });
-  //   Id: quiz.Basic_Details.Id,
-  //   No_ofQuestions:
-  //     quiz.Basic_Details.No_ofQuestions === 0
-  //       ? ""
-  //       : quiz.Basic_Details.No_ofQuestions.toString(),
-  //   category: quiz.Basic_Details.category,
-  //   quizName: quiz.Basic_Details.quizName,
-  //   Time:
-  //     quiz.Basic_Details.Time === 0 ? "" : quiz.Basic_Details.Time.toString(),
-  //   TimePeriod: {
-  //     start: new Date(),
-  //     end: new Date(),
-  //   },
-  //   pointsPerQuestion:
-  //     quiz.Basic_Details.pointsPerQuestion === 0
-  //       ? ""
-  //       : quiz.Basic_Details.pointsPerQuestion.toString(),
-  //   logoUrl: quiz.Basic_Details.logoUrl,
-  // });
 
   const [quizDetailsErrors, setQuizDetailsErrors] = useState({
     No_ofQuestions: "",
@@ -320,6 +296,18 @@ const BasicDetailForm = ({ navigation }) => {
             <View style={styles.quizCard}>
               <View style={styles.quizCardTextContainer}>
                 <Text style={styles.quizCardText}>Fill Quiz Basic Details</Text>
+                {/* <DatePicker
+                  current="2020-07-13"
+                  minimumDate="2020-02-17"
+                  maximumDate="2020-07-25"
+                /> */}
+                {/* <Calendar
+                  onChange={(date) => setState(date)}
+                  selected={state.date}
+                  minDate={moment().startOf('day')}
+                  maxDate={moment().add(10, 'years').startOf('day')}
+                /> */}
+                {/* <DatePickerCalendar date={date} onChange={(selectedDate) => setDate(selectedDate)} /> */}
               </View>
               {quiz.Basic_Details.logoUrl.length !== 0 && (
                 <View style={styles.imageContainer}>
@@ -397,6 +385,7 @@ const BasicDetailForm = ({ navigation }) => {
                       onChange={onChangeFromDate}
                       style={styles.datePickerIOS}
                     />
+
                     <Text>Select expiry date of quiz (Touch Below)</Text>
                     <DateTimePicker
                       value={new Date(quiz.Basic_Details.TimePeriod.end)}
