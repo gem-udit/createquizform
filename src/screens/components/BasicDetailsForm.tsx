@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { QuizContext } from "../../context/QuizContextApi";
 import Dropdown from "react-native-element-dropdown/src/components/Dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import DatePickerCalendar from 'react-native-calendarview-datepicker';
+import Calendar from 'react-native-calendar-datepicker';
+import moment from "moment";
 import {
   View,
   Text,
@@ -25,6 +28,8 @@ const BasicDetailForm = ({ navigation }) => {
   const [saveLogoBtnClickedError, setSaveLogoBtnClickedError] = useState("");
   let { quiz, setQuiz }: any = useContext(QuizContext);
   const integerRegExp = RegExp(/^[0-9]+$/);
+  const [date, setDate] = useState(moment());
+  const [state, setState] = useState(moment());
   const categories = [
     {
       text: "Sports",
@@ -286,6 +291,14 @@ const BasicDetailForm = ({ navigation }) => {
             <View style={styles.quizCard}>
               <View style={styles.quizCardTextContainer}>
                 <Text style={styles.quizCardText}>Fill Quiz Basic Details</Text>
+                <DatePickerCalendar date={date} onChange={(selectedDate) => setDate(selectedDate)} />
+                {/* <Calendar
+                  onChange={(date) => setState(date)}
+                  date={state}
+                  // selected={state.date}
+                  minDate={moment().startOf('day')}
+                  maxDate={moment().add(10, 'years').startOf('day')}
+                /> */}
               </View>
               {quiz.Basic_Details.logoUrl.length !== 0 && (
                 <View style={styles.imageContainer}>
@@ -379,7 +392,7 @@ const BasicDetailForm = ({ navigation }) => {
                   <View>
                     <View style={styles.pickedDateContainer}>
                       <Text style={styles.pickedDate}>
-                        {quiz.Basic_Details.TimePeriod.start}
+                        {(new Date(quiz.Basic_Details.TimePeriod.start)).toDateString()}
                       </Text>
                     </View>
                     {!isPickerShowFromDate && (
@@ -403,7 +416,7 @@ const BasicDetailForm = ({ navigation }) => {
                     )}
                     <View style={styles.pickedDateContainer}>
                       <Text style={styles.pickedDate}>
-                        {quiz.Basic_Details.TimePeriod.end}
+                        {(new Date(quiz.Basic_Details.TimePeriod.end)).toDateString()}
                       </Text>
                     </View>
                     {!isPickerShowToDate && (
