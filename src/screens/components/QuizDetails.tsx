@@ -13,10 +13,10 @@ import { collection, addDoc } from "firebase/firestore";
 const QuizDetails = ({ navigation, }) => {
   const { quiz, clearquiz, deletequiz }: any = useContext(QuizContext);
   //console.log(quiz)
-  useEffect(()=>{
+  useEffect(() => {
     console.log(quiz);
     console.log("------------");
-  },[navigation,quiz])
+  }, [navigation, quiz])
   const handleRemoveItem = async (id: Object) => {
     deletequiz(id);
   }
@@ -75,13 +75,13 @@ const QuizDetails = ({ navigation, }) => {
               <View style={styles.basicDetailRow}>
                 <Text style={styles.basicDetailTitle}>Quiz From Date</Text>
                 <Text style={styles.basicDetailData}>
-                  {quiz.Basic_Details.TimePeriod.start}
+                  {(new Date(quiz.Basic_Details.TimePeriod.start)).toDateString()}
                 </Text>
               </View>
               <View style={styles.basicDetailRow}>
                 <Text style={styles.basicDetailTitle}>Quiz To Date</Text>
                 <Text style={styles.basicDetailData}>
-                  {quiz.Basic_Details.TimePeriod.end}
+                  {(new Date(quiz.Basic_Details.TimePeriod.end)).toDateString()}
                 </Text>
               </View>
               <View style={styles.basicDetailRow}>
