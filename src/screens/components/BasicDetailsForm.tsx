@@ -244,16 +244,6 @@ const BasicDetailForm = ({ navigation }) => {
       quizInfoErrors.No_ofQuestions = "Number of question should be integer";
       isQuizDetailsValid = false;
     }
-    // } else {
-    //   if (
-    //     quiz.Basic_Details.No_ofQuestions < 10 ||
-    //     quiz.Basic_Details.No_ofQuestions > 20
-    //   ) {
-    //     quizInfoErrors.No_ofQuestions =
-    //       "Number of question should be between 10 and 20";
-    //     isQuizDetailsValid = false;
-    //   }
-    // }
     if (quiz.Basic_Details.logoUrl === "") {
       quizInfoErrors.logoUrl = "Logo Url is Required";
       isQuizDetailsValid = false;
@@ -283,7 +273,7 @@ const BasicDetailForm = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.createQuizHeader}>
-        <Text style={styles.createQuizTxt}>Create Quiz</Text>
+        <Text style={styles.createQuizTxt}>Gemini Quiz</Text>
       </View>
       <ScrollView>
         <View style={styles.quizConatiner}>
@@ -291,14 +281,6 @@ const BasicDetailForm = ({ navigation }) => {
             <View style={styles.quizCard}>
               <View style={styles.quizCardTextContainer}>
                 <Text style={styles.quizCardText}>Fill Quiz Basic Details</Text>
-                <DatePickerCalendar date={date} onChange={(selectedDate) => setDate(selectedDate)} />
-                {/* <Calendar
-                  onChange={(date) => setState(date)}
-                  date={state}
-                  // selected={state.date}
-                  minDate={moment().startOf('day')}
-                  maxDate={moment().add(10, 'years').startOf('day')}
-                /> */}
               </View>
               {quiz.Basic_Details.logoUrl.length !== 0 && (
                 <View style={styles.imageContainer}>
@@ -307,10 +289,10 @@ const BasicDetailForm = ({ navigation }) => {
                     source={{ uri: quiz.Basic_Details.logoUrl }}
                   ></Image>
                   {saveLogoBtnClicked && progressPercent < 100 && (
-                    <Text>Uploading...</Text>
+                    <Text style={{ bottom: "5%" }}>Uploading...</Text>
                   )}
                   {saveLogoBtnClicked && progressPercent === 100 && (
-                    <Text>Uploaded</Text>
+                    <Text style={{ bottom: "5%" }}>Uploaded</Text>
                   )}
                   <View style={styles.quizLogoBtnContainer}>
                     <TouchableOpacity
@@ -334,7 +316,7 @@ const BasicDetailForm = ({ navigation }) => {
                 </View>
               )}
               <View>
-                <Text>Enter Quiz Name</Text>
+                <Text style={styles.content}>Enter Quiz Name</Text>
                 <TextInput
                   placeholder="Enter Quiz Name"
                   onChangeText={onChangeQuizDetails("quizName")}
@@ -346,7 +328,7 @@ const BasicDetailForm = ({ navigation }) => {
                     {quizDetailsErrors.quizName}
                   </Text>
                 )}
-                <Text>Select Quiz Category</Text>
+                <Text style={styles.content}>Select Quiz Category</Text>
                 <Dropdown
                   style={styles.dropdown}
                   placeholderStyle={styles.placeholderStyle}
@@ -387,7 +369,7 @@ const BasicDetailForm = ({ navigation }) => {
                     />
                   </View>
                 )}
-                {Platform.OS !== "ios" && <Text>Enter Quiz Time Period</Text>}
+                {Platform.OS !== "ios" && <Text style={styles.content}>Enter Quiz Time Period</Text>}
                 {Platform.OS !== "ios" && (
                   <View>
                     <View style={styles.pickedDateContainer}>
@@ -399,7 +381,7 @@ const BasicDetailForm = ({ navigation }) => {
                       <View style={styles.datebtnContainer}>
                         <Button
                           title="From Date"
-                          color="purple"
+                          color="#9187E6"
                           onPress={showPickerFromDate}
                         />
                       </View>
@@ -423,7 +405,7 @@ const BasicDetailForm = ({ navigation }) => {
                       <View style={styles.datebtnContainer}>
                         <Button
                           title="To Date"
-                          color="purple"
+                          color="#9187E6"
                           onPress={showPickerToDate}
                         />
                       </View>
@@ -441,7 +423,7 @@ const BasicDetailForm = ({ navigation }) => {
                     )}
                   </View>
                 )}
-                <Text>Enter Quiz Duration</Text>
+                <Text style={styles.content}>Enter Quiz Duration</Text>
                 <TextInput
                   placeholder="Enter Quiz Duration (in minutes)"
                   onChangeText={onChangeQuizDetails("Time")}
@@ -458,7 +440,7 @@ const BasicDetailForm = ({ navigation }) => {
                     {quizDetailsErrors.Time}
                   </Text>
                 )}
-                <Text>Enter Points Per Question</Text>
+                <Text style={styles.content}>Enter Points Per Question</Text>
                 <TextInput
                   placeholder="Enter Points per question"
                   onChangeText={onChangeQuizDetails("pointsPerQuestion")}
@@ -475,7 +457,7 @@ const BasicDetailForm = ({ navigation }) => {
                     {quizDetailsErrors.pointsPerQuestion}
                   </Text>
                 )}
-                <Text>Enter Total Quesions</Text>
+                <Text style={styles.content}>Enter Total Questions</Text>
                 <TextInput
                   placeholder="Enter Total Questions"
                   onChangeText={onChangeQuizDetails("No_ofQuestions")}
@@ -527,21 +509,25 @@ const styles = StyleSheet.create({
   },
   createQuizTxt: {
     color: "white",
-    fontWeight: "bold",
     fontSize: 26,
+    top: "10%",
+    fontFamily: "Montserrat-SemiBold"
   },
   createQuizHeader: {
-    backgroundColor: "lightblue",
+    backgroundColor: "#6A5AE1",
     alignItems: "center",
     justifyContent: "center",
     height: 120,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   quizConatiner: {
     alignItems: "center",
   },
   incorrectFeedback: {
-    color: "red",
-    marginBottom: 12,
+    color: "#E46566",
+    fontFamily: "Montserrat",
+    fontSize: 14,
   },
   uploadImgBtn: {
     width: "100%",
@@ -555,7 +541,7 @@ const styles = StyleSheet.create({
   saveDetailsBtn: {
     width: "40%",
     height: "80%",
-    backgroundColor: "lightblue",
+    backgroundColor: "#9187E6",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
@@ -570,9 +556,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   saveQuizLogoBtn: {
-    width: "35%",
+    width: "40%",
     height: "100%",
-    backgroundColor: "lightblue",
+    backgroundColor: "#9187E6",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
@@ -601,8 +587,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   quizCardText: {
-    fontWeight: "bold",
     fontSize: 22,
+    fontFamily: "Montserrat-SemiBold"
   },
   quizCard: {
     borderWidth: 1,
@@ -622,15 +608,19 @@ const styles = StyleSheet.create({
   textInputStyling: {
     height: 40,
     borderWidth: 1,
-    marginBottom: 6,
+    marginBottom: 10,
     borderColor: "lightgrey",
     borderRadius: 7,
     padding: 10,
     justifyContent: "center",
+    marginTop: 10,
+    fontFamily: "Montserrat",
+    fontSize: 14
   },
   btnText: {
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "Montserrat-SemiBold",
+    fontSize: 14
   },
   pickerStyle: {
     width: "100%",
@@ -638,16 +628,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   pickedDateContainer: {
-    padding: 20,
+    padding: 10,
     backgroundColor: "#eee",
     borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 10
   },
   pickedDate: {
-    fontSize: 18,
-    color: "black",
+    fontSize: 14,
+    fontFamily: "Montserrat",
   },
   datebtnContainer: {
-    padding: 30,
+    padding: 10,
   },
   datePickerIOS: {
     width: "40%",
@@ -665,13 +657,16 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 50,
-    borderColor: "gray",
-    borderWidth: 0.5,
+    borderColor: "lightgray",
+    borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 8,
+    marginTop: 10,
+    marginBottom: 10
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 14,
+    fontFamily: "Montserrat",
   },
   selectedTextStyle: {
     fontSize: 16,
@@ -680,5 +675,9 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
+  content: {
+    fontFamily: "Montserrat-SemiBold",
+    fontSize: 14
+  }
 });
 export default BasicDetailForm;
