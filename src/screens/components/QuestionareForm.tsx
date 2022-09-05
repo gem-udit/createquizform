@@ -49,7 +49,7 @@ const QuestionareForm = ({ navigation, route }) => {
     )
       navigation.navigate("quizDetails");
 
-  },[navigation,question]);
+  }, [navigation, question]);
   const handleQuesAnsChange = (name: string) => (text: string) => {
     //console.log(text)
     setQuesAnsError({
@@ -122,7 +122,7 @@ const QuestionareForm = ({ navigation, route }) => {
           {
             Ques: quesAns.Ques,
             CorrectAns: quesAns.CorrectAns,
-            Incorrect_Ans: [incorrectAnswers.option1,incorrectAnswers.option2,incorrectAnswers.option3],
+            Incorrect_Ans: [incorrectAnswers.option1, incorrectAnswers.option2, incorrectAnswers.option3],
           },
           index
         );
@@ -157,18 +157,19 @@ const QuestionareForm = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.createQuizHeader}>
-        <Text style={styles.createQuizTxt}>Create Quiz</Text>
+        <Text style={styles.createQuizTxt}>Gemini Quiz</Text>
       </View>
       <ScrollView>
         <View style={styles.quizConatiner}>
           <View style={styles.quizSmallContainer}>
             <View style={styles.quizCard}>
-              <View style={styles.quizCardTextContainer}>
+              <View style={styles.quizCardContainer}>
                 <Text style={styles.quizCardText}>
                   Fill questions details and click on save each time to save a
                   question
                 </Text>
               </View>
+              <Text style={styles.content}>Enter the question</Text>
               <TextInput
                 placeholder="Enter the question"
                 onChangeText={handleQuesAnsChange("Ques")}
@@ -180,7 +181,7 @@ const QuestionareForm = ({ navigation, route }) => {
                   {quesAnsError.Ques}
                 </Text>
               )}
-              <Text>Correct Answer</Text>
+              <Text style={styles.content}>Correct Answer</Text>
               <TextInput
                 placeholder="Enter the correct answer"
                 onChangeText={handleQuesAnsChange("CorrectAns")}
@@ -192,7 +193,7 @@ const QuestionareForm = ({ navigation, route }) => {
                   {quesAnsError.CorrectAns}
                 </Text>
               )}
-              <Text>Incorrect Answers</Text>
+              <Text style={styles.content}>Incorrect Answers</Text>
               <TextInput
                 placeholder="Enter option 1"
                 onChangeText={handleIncorrectOptionsChange("option1")}
@@ -249,9 +250,7 @@ const QuestionareForm = ({ navigation, route }) => {
               {index === -1 && (
                 <View style={styles.quizCardTextContainer}>
                   <Text style={styles.quizCardText}>
-                    Total Question Remaining
-                    {quiz.Basic_Details.No_ofQuestions -
-                      quiz.Questionare.length}
+                    Total Questions Remaining {quiz.Basic_Details.No_ofQuestions - quiz.Questionare.length}
                   </Text>
                 </View>
               )}
@@ -268,38 +267,42 @@ const styles = StyleSheet.create({
   },
   createQuizTxt: {
     color: "white",
-    fontWeight: "bold",
     fontSize: 26,
+    top: "10%",
+    fontFamily: "Montserrat-SemiBold"
   },
   createQuizHeader: {
-    backgroundColor: "lightblue",
+    backgroundColor: "#6A5AE1",
     alignItems: "center",
     justifyContent: "center",
     height: 120,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   quizConatiner: {
     alignItems: "center",
   },
   incorrectFeedback: {
-    color: "red",
-    marginBottom: 12,
+    color: "#E46566",
+    fontFamily: "Montserrat",
+    fontSize: 14,
   },
-
   btnContainer: {
     height: 40,
     flexDirection: "row",
     justifyContent: "center",
+    marginTop: "5%"
   },
   quizSmallContainer: {
     width: "90%",
   },
   quizCardTextContainer: {
     alignItems: "center",
-    marginBottom: 20,
+    marginTop: 10,
   },
   quizCardText: {
-    fontWeight: "bold",
-    fontSize: 22,
+    fontSize: 20,
+    fontFamily: "Montserrat-SemiBold"
   },
   quizCard: {
     borderWidth: 1,
@@ -319,25 +322,30 @@ const styles = StyleSheet.create({
   textInputStyling: {
     height: 40,
     borderWidth: 1,
-    marginBottom: 6,
+    marginBottom: 10,
     borderColor: "lightgrey",
     borderRadius: 7,
     padding: 10,
     justifyContent: "center",
+    marginTop: 10,
+    fontFamily: "Montserrat",
+    fontSize: 14
+
   },
   saveBtnBackground: {
-    backgroundColor: "lightblue",
+    backgroundColor: "#9187E6",
     marginRight: 5,
   },
   btnText: {
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "Montserrat-SemiBold",
+    fontSize: 14
   },
   resetBtnBackground: {
-    backgroundColor: "red",
+    backgroundColor: "#E46566",
   },
   submitBtnBackground: {
-    backgroundColor: "green",
+    backgroundColor: "#9187E6",
   },
   questionButtonsStyling: {
     width: "25%",
@@ -346,5 +354,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
   },
+  quizCardContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  content: {
+    fontFamily: "Montserrat-SemiBold",
+    fontSize: 14
+  }
 });
 export default QuestionareForm;
