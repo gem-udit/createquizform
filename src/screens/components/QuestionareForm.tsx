@@ -157,19 +157,19 @@ const QuestionareForm = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.createQuizHeader}>
-        <Text style={styles.createQuizTxt}>Gemini Quiz</Text>
+        <Text allowFontScaling={false} style={styles.createQuizTxt}>Gemini Quiz</Text>
       </View>
       <ScrollView>
         <View style={styles.quizConatiner}>
           <View style={styles.quizSmallContainer}>
             <View style={styles.quizCard}>
               <View style={styles.quizCardContainer}>
-                <Text style={styles.quizCardText}>
+                <Text allowFontScaling={false} style={styles.quizCardText}>
                   Fill questions details and click on save each time to save a
                   question
                 </Text>
               </View>
-              <Text style={styles.content}>Enter the question</Text>
+              <Text allowFontScaling={false} style={styles.content}>Enter the question</Text>
               <TextInput
                 placeholder="Enter the question"
                 onChangeText={handleQuesAnsChange("Ques")}
@@ -177,11 +177,11 @@ const QuestionareForm = ({ navigation, route }) => {
                 style={styles.textInputStyling}
               />
               {quesAnsError.Ques.length !== 0 && (
-                <Text style={styles.incorrectFeedback}>
+                <Text allowFontScaling={false} style={styles.incorrectFeedback}>
                   {quesAnsError.Ques}
                 </Text>
               )}
-              <Text style={styles.content}>Correct Answer</Text>
+              <Text allowFontScaling={false} style={styles.content}>Correct Answer</Text>
               <TextInput
                 placeholder="Enter the correct answer"
                 onChangeText={handleQuesAnsChange("CorrectAns")}
@@ -189,11 +189,11 @@ const QuestionareForm = ({ navigation, route }) => {
                 style={styles.textInputStyling}
               />
               {quesAnsError.CorrectAns.length !== 0 && (
-                <Text style={styles.incorrectFeedback}>
+                <Text allowFontScaling={false} style={styles.incorrectFeedback}>
                   {quesAnsError.CorrectAns}
                 </Text>
               )}
-              <Text style={styles.content}>Incorrect Answers</Text>
+              <Text allowFontScaling={false} style={styles.content}>Incorrect Answers</Text>
               <TextInput
                 placeholder="Enter option 1"
                 onChangeText={handleIncorrectOptionsChange("option1")}
@@ -201,7 +201,7 @@ const QuestionareForm = ({ navigation, route }) => {
                 style={styles.textInputStyling}
               />
               {incorrectAnsError.option1.length !== 0 && (
-                <Text style={styles.incorrectFeedback}>
+                <Text allowFontScaling={false} style={styles.incorrectFeedback}>
                   {incorrectAnsError.option1}
                 </Text>
               )}
@@ -212,7 +212,7 @@ const QuestionareForm = ({ navigation, route }) => {
                 style={styles.textInputStyling}
               />
               {incorrectAnsError.option2.length !== 0 && (
-                <Text style={styles.incorrectFeedback}>
+                <Text allowFontScaling={false} style={styles.incorrectFeedback}>
                   {incorrectAnsError.option2}
                 </Text>
               )}
@@ -223,7 +223,7 @@ const QuestionareForm = ({ navigation, route }) => {
                 style={styles.textInputStyling}
               />
               {incorrectAnsError.option3.length !== 0 && (
-                <Text style={styles.incorrectFeedback}>
+                <Text allowFontScaling={false} style={styles.incorrectFeedback}>
                   {incorrectAnsError.option3}
                 </Text>
               )}
@@ -235,7 +235,7 @@ const QuestionareForm = ({ navigation, route }) => {
                   ]}
                   onPress={onSubmit}
                 >
-                  <Text style={styles.btnText}>Save</Text>
+                  <Text allowFontScaling={false} style={styles.btnText}>Save</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[
@@ -244,12 +244,12 @@ const QuestionareForm = ({ navigation, route }) => {
                   ]}
                   onPress={resetQuestion}
                 >
-                  <Text style={styles.btnText}>Reset</Text>
+                  <Text allowFontScaling={false} style={styles.btnText}>Reset</Text>
                 </TouchableOpacity>
               </View>
               {index === -1 && (
                 <View style={styles.quizCardTextContainer}>
-                  <Text style={styles.quizCardText}>
+                  <Text allowFontScaling={false} style={styles.quizCardText}>
                     Total Questions Remaining {quiz.Basic_Details.No_ofQuestions - quiz.Questionare.length}
                   </Text>
                 </View>

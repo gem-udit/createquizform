@@ -273,14 +273,14 @@ const BasicDetailForm = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.createQuizHeader}>
-        <Text style={styles.createQuizTxt}>Gemini Quiz</Text>
+        <Text allowFontScaling={false} style={styles.createQuizTxt}>Gemini Quiz</Text>
       </View>
       <ScrollView>
         <View style={styles.quizConatiner}>
           <View style={styles.quizSmallContainer}>
             <View style={styles.quizCard}>
               <View style={styles.quizCardTextContainer}>
-                <Text style={styles.quizCardText}>Fill Quiz Basic Details</Text>
+                <Text allowFontScaling={false} style={styles.quizCardText}>Fill Quiz Basic Details</Text>
               </View>
               {quiz.Basic_Details.logoUrl.length !== 0 && (
                 <View style={styles.imageContainer}>
@@ -289,34 +289,34 @@ const BasicDetailForm = ({ navigation }) => {
                     source={{ uri: quiz.Basic_Details.logoUrl }}
                   ></Image>
                   {saveLogoBtnClicked && progressPercent < 100 && (
-                    <Text style={{ bottom: "5%" }}>Uploading...</Text>
+                    <Text allowFontScaling={false} style={{ bottom: "5%" }}>Uploading...</Text>
                   )}
                   {saveLogoBtnClicked && progressPercent === 100 && (
-                    <Text style={{ bottom: "5%" }}>Uploaded</Text>
+                    <Text allowFontScaling={false} style={{ bottom: "5%" }}>Uploaded</Text>
                   )}
                   <View style={styles.quizLogoBtnContainer}>
                     <TouchableOpacity
                       style={styles.saveQuizLogoBtn}
                       onPress={saveQuizLogo}
                     >
-                      <Text style={styles.btnText}>Save Image</Text>
+                      <Text allowFontScaling={false} style={styles.btnText}>Save Image</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={styles.saveQuizLogoBtn}
                       onPress={handleImgaeUploadClick}
                     >
-                      <Text style={styles.btnText}>Change Image</Text>
+                      <Text allowFontScaling={false} style={styles.btnText}>Change Image</Text>
                     </TouchableOpacity>
                   </View>
                   {saveLogoBtnClickedError.length !== 0 && (
-                    <Text style={styles.incorrectFeedback}>
+                    <Text allowFontScaling={false} style={styles.incorrectFeedback}>
                       {saveLogoBtnClickedError}
                     </Text>
                   )}
                 </View>
               )}
               <View>
-                <Text style={styles.content}>Enter Quiz Name</Text>
+                <Text allowFontScaling={false} style={styles.content}>Enter Quiz Name</Text>
                 <TextInput
                   placeholder="Enter Quiz Name"
                   onChangeText={onChangeQuizDetails("quizName")}
@@ -324,11 +324,11 @@ const BasicDetailForm = ({ navigation }) => {
                   style={styles.textInputStyling}
                 />
                 {quizDetailsErrors.quizName !== "" && (
-                  <Text style={styles.incorrectFeedback}>
+                  <Text allowFontScaling={false} style={styles.incorrectFeedback}>
                     {quizDetailsErrors.quizName}
                   </Text>
                 )}
-                <Text style={styles.content}>Select Quiz Category</Text>
+                <Text allowFontScaling={false} style={styles.content}>Select Quiz Category</Text>
                 <Dropdown
                   style={styles.dropdown}
                   placeholderStyle={styles.placeholderStyle}
@@ -344,13 +344,13 @@ const BasicDetailForm = ({ navigation }) => {
                   onChange={onChangeQuizDetails("category")}
                 />
                 {quizDetailsErrors.category !== "" && (
-                  <Text style={styles.incorrectFeedback}>
+                  <Text allowFontScaling={false} style={styles.incorrectFeedback}>
                     {quizDetailsErrors.category}
                   </Text>
                 )}
                 {Platform.OS === "ios" && (
                   <View style={{ marginTop: 10 }}>
-                    <Text>Select starting date of quiz (Touch below)</Text>
+                    <Text allowFontScaling={false}>Select starting date of quiz (Touch below)</Text>
                     <DateTimePicker
                       value={new Date(quiz.Basic_Details.TimePeriod.start)}
                       mode={"date"}
@@ -359,7 +359,7 @@ const BasicDetailForm = ({ navigation }) => {
                       style={styles.datePickerIOS}
                     />
 
-                    <Text>Select expiry date of quiz (Touch Below)</Text>
+                    <Text allowFontScaling={false}>Select expiry date of quiz (Touch Below)</Text>
                     <DateTimePicker
                       value={new Date(quiz.Basic_Details.TimePeriod.end)}
                       mode={"date"}
@@ -369,11 +369,11 @@ const BasicDetailForm = ({ navigation }) => {
                     />
                   </View>
                 )}
-                {Platform.OS !== "ios" && <Text style={styles.content}>Enter Quiz Time Period</Text>}
+                {Platform.OS !== "ios" && <Text allowFontScaling={false} style={styles.content}>Enter Quiz Time Period</Text>}
                 {Platform.OS !== "ios" && (
                   <View>
                     <View style={styles.pickedDateContainer}>
-                      <Text style={styles.pickedDate}>
+                      <Text allowFontScaling={false} style={styles.pickedDate}>
                         {(new Date(quiz.Basic_Details.TimePeriod.start)).toDateString()}
                       </Text>
                     </View>
@@ -397,7 +397,7 @@ const BasicDetailForm = ({ navigation }) => {
                       />
                     )}
                     <View style={styles.pickedDateContainer}>
-                      <Text style={styles.pickedDate}>
+                      <Text allowFontScaling={false} style={styles.pickedDate}>
                         {(new Date(quiz.Basic_Details.TimePeriod.end)).toDateString()}
                       </Text>
                     </View>
@@ -423,7 +423,7 @@ const BasicDetailForm = ({ navigation }) => {
                     )}
                   </View>
                 )}
-                <Text style={styles.content}>Enter Quiz Duration</Text>
+                <Text allowFontScaling={false} style={styles.content}>Enter Quiz Duration</Text>
                 <TextInput
                   placeholder="Enter Quiz Duration (in minutes)"
                   onChangeText={onChangeQuizDetails("Time")}
@@ -436,11 +436,11 @@ const BasicDetailForm = ({ navigation }) => {
                   keyboardType={"numeric"}
                 />
                 {quizDetailsErrors.Time.length !== 0 && (
-                  <Text style={styles.incorrectFeedback}>
+                  <Text allowFontScaling={false} style={styles.incorrectFeedback}>
                     {quizDetailsErrors.Time}
                   </Text>
                 )}
-                <Text style={styles.content}>Enter Points Per Question</Text>
+                <Text allowFontScaling={false} style={styles.content}>Enter Points Per Question</Text>
                 <TextInput
                   placeholder="Enter Points per question"
                   onChangeText={onChangeQuizDetails("pointsPerQuestion")}
@@ -453,11 +453,11 @@ const BasicDetailForm = ({ navigation }) => {
                   keyboardType={"numeric"}
                 />
                 {quizDetailsErrors.pointsPerQuestion.length !== 0 && (
-                  <Text style={styles.incorrectFeedback}>
+                  <Text allowFontScaling={false} style={styles.incorrectFeedback}>
                     {quizDetailsErrors.pointsPerQuestion}
                   </Text>
                 )}
-                <Text style={styles.content}>Enter Total Questions</Text>
+                <Text allowFontScaling={false} style={styles.content}>Enter Total Questions</Text>
                 <TextInput
                   placeholder="Enter Total Questions"
                   onChangeText={onChangeQuizDetails("No_ofQuestions")}
@@ -470,7 +470,7 @@ const BasicDetailForm = ({ navigation }) => {
                   keyboardType={"numeric"}
                 />
                 {quizDetailsErrors.No_ofQuestions.length !== 0 && (
-                  <Text style={styles.incorrectFeedback}>
+                  <Text allowFontScaling={false} style={styles.incorrectFeedback}>
                     {quizDetailsErrors.No_ofQuestions}
                   </Text>
                 )}
@@ -479,11 +479,11 @@ const BasicDetailForm = ({ navigation }) => {
                     style={styles.uploadImgBtn}
                     onPress={handleImgaeUploadClick}
                   >
-                    <Text style={styles.btnText}>Upload Quiz Logo</Text>
+                    <Text allowFontScaling={false} style={styles.btnText}>Upload Quiz Logo</Text>
                   </TouchableOpacity>
                 </View>
                 {quizDetailsErrors.logoUrl.length !== 0 && (
-                  <Text style={styles.incorrectFeedback}>
+                  <Text allowFontScaling={false} style={styles.incorrectFeedback}>
                     {quizDetailsErrors.logoUrl}
                   </Text>
                 )}
@@ -492,7 +492,7 @@ const BasicDetailForm = ({ navigation }) => {
                     style={styles.saveDetailsBtn}
                     onPress={onSubmit}
                   >
-                    <Text style={styles.btnText}>Save Details</Text>
+                    <Text allowFontScaling={false} style={styles.btnText}>Save Details</Text>
                   </TouchableOpacity>
                 </View>
               </View>
