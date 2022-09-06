@@ -50,17 +50,17 @@ const QuizDetails = ({ navigation, }) => {
   return (
     <View style={styles.container}>
       <View style={styles.createQuizHeader}>
-        <Text style={styles.createQuizTxt}>Gemini Quiz</Text>
+        <Text allowFontScaling={false} style={styles.createQuizTxt}>Gemini Quiz</Text>
       </View>
       <ScrollView>
         <View style={styles.completedFormContainer}>
-          <Text style={styles.completedFormText}>
+          <Text allowFontScaling={false} style={styles.completedFormText}>
             Quiz Basic Details and Questions filled Successfully. Review the details
             and click on Submit Button at bottom of screen to save your Quiz
           </Text>
           <View style={styles.quizDetailsQuestionsContainer}>
             <View style={styles.basicDetailContainer}>
-              <Text style={styles.quizDetailsHeading}>Quiz Basic Details</Text>
+              <Text allowFontScaling={false} style={styles.quizDetailsHeading}>Quiz Basic Details</Text>
               {quiz.Basic_Details.logoUrl !== "" && (
                 <View style={styles.quizDetailsQuizLogoContainer}>
                   <Image
@@ -77,87 +77,87 @@ const QuizDetails = ({ navigation, }) => {
                         width: width / 17.72,
                         height: width / 15.72,
                         alignSelf: "center",
-                        tintColor: "#498BEA",
+                        tintColor: "#6A5AE1",
                       }} />
                   </TouchableOpacity>
                 </View>
               )}
               <View style={styles.basicDetailRow}>
-                <Text style={styles.basicDetailTitle}>Quiz Title</Text>
-                <Text style={styles.basicDetailData}>
+                <Text allowFontScaling={false} style={styles.basicDetailTitle}>Quiz Title</Text>
+                <Text allowFontScaling={false} style={styles.basicDetailData}>
                   {quiz.Basic_Details.quizName}
                 </Text>
               </View>
               <View style={styles.basicDetailRow}>
-                <Text style={styles.basicDetailTitle}>Quiz From Date</Text>
-                <Text style={styles.basicDetailData}>
+                <Text allowFontScaling={false} style={styles.basicDetailTitle}>Quiz From Date</Text>
+                <Text allowFontScaling={false} style={styles.basicDetailData}>
                   {(new Date(quiz.Basic_Details.TimePeriod.start)).toDateString()}
                 </Text>
               </View>
               <View style={styles.basicDetailRow}>
-                <Text style={styles.basicDetailTitle}>Quiz To Date</Text>
-                <Text style={styles.basicDetailData}>
+                <Text allowFontScaling={false} style={styles.basicDetailTitle}>Quiz To Date</Text>
+                <Text allowFontScaling={false} style={styles.basicDetailData}>
                   {(new Date(quiz.Basic_Details.TimePeriod.end)).toDateString()}
                 </Text>
               </View>
               <View style={styles.basicDetailRow}>
-                <Text style={styles.basicDetailTitle}>Quiz Duration</Text>
-                <Text style={styles.basicDetailData}>
+                <Text allowFontScaling={false} style={styles.basicDetailTitle}>Quiz Duration</Text>
+                <Text allowFontScaling={false} style={styles.basicDetailData}>
                   {quiz.Basic_Details.Time}
                 </Text>
               </View>
               <View style={styles.basicDetailRow}>
-                <Text style={styles.basicDetailTitle}>
+                <Text allowFontScaling={false} style={styles.basicDetailTitle}>
                   Points Per Questions
                 </Text>
-                <Text style={styles.basicDetailData}>
+                <Text allowFontScaling={false} style={styles.basicDetailData}>
                   {quiz.Basic_Details.pointsPerQuestion}
                 </Text>
               </View>
               <View style={styles.basicDetailRow}>
-                <Text style={styles.basicDetailTitle}>Total Questions</Text>
-                <Text style={styles.basicDetailData}>
+                <Text allowFontScaling={false} style={styles.basicDetailTitle}>Total Questions</Text>
+                <Text allowFontScaling={false} style={styles.basicDetailData}>
                   {quiz.Basic_Details.No_ofQuestions}
                 </Text>
               </View>
               <View style={styles.basicDetailRow}>
-                <Text style={styles.basicDetailTitle}>Category</Text>
-                <Text style={styles.basicDetailData}>
+                <Text allowFontScaling={false} style={styles.basicDetailTitle}>Category</Text>
+                <Text allowFontScaling={false} style={styles.basicDetailData}>
                   {quiz.Basic_Details.category}
                 </Text>
               </View>
-              <Text style={styles.quizDetailsHeading}>Quiz Questions</Text>
+              <Text allowFontScaling={false} style={styles.quizDetailsHeading}>Quiz Questions</Text>
               {quiz.Questionare.map((question: any, index: number) => (
                 <View style={{ flexDirection: "row" }} key={index}>
                   <View style={styles.questionareContainer}>
                     <View>
-                      <Text style={styles.questionareTitle}>
+                      <Text allowFontScaling={false} style={styles.questionareTitle}>
                         Question {index + 1}
                       </Text>
-                      <Text style={styles.questionareData}>
-                        <Text>{question.Ques}</Text>
+                      <Text allowFontScaling={false} style={styles.questionareData}>
+                        {question.Ques}
                       </Text>
                     </View>
                     <View>
-                      <Text style={styles.questionareTitle}>Answer</Text>
-                      <Text style={styles.questionareData}>
+                      <Text allowFontScaling={false} style={styles.questionareTitle}>Answer</Text>
+                      <Text allowFontScaling={false} style={styles.questionareData}>
                         {question.CorrectAns}
                       </Text>
                     </View>
                     <View>
-                      <Text style={styles.questionareTitle}>
+                      <Text allowFontScaling={false} style={styles.questionareTitle}>
                         Incorrect Answer
                       </Text>
                       {question.Incorrect_Ans.map(
                         (incorrectOption: String, index: number) => (
-                          <Text style={styles.questionareData} key={index}>
-                            {index + 1}.{incorrectOption}
+                          <Text allowFontScaling={false} style={styles.questionareData} key={index}>
+                            {index + 1}. {incorrectOption}
                           </Text>
                         )
                       )}
                     </View>
                   </View>
-                  <View style={{ flexDirection: "column", top: height / 50 }}>
+                  <View style={{ flexDirection: "column", top: height / 50, left: "2%" }}>
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate("Questions", {
@@ -172,7 +172,7 @@ const QuizDetails = ({ navigation, }) => {
                           width: width / 17.72,
                           height: width / 15.72,
                           alignSelf: "center",
-                          tintColor: "#498BEA",
+                          tintColor: "#6A5AE1",
                         }}
                       />
                     </TouchableOpacity>
@@ -185,7 +185,7 @@ const QuizDetails = ({ navigation, }) => {
                             height: width / 16.72,
                             alignSelf: "center",
                             top: "20%",
-                            tintColor: "#498BEA",
+                            tintColor: "#6A5AE1",
                           }}
                         />
                       </TouchableOpacity>) : (<></>)}
@@ -201,7 +201,7 @@ const QuizDetails = ({ navigation, }) => {
                 ]}
                 onPress={submitQuiz}
               >
-                <Text style={styles.btnText}>Submit</Text>
+                <Text allowFontScaling={false} style={styles.btnText}>Submit</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[
@@ -210,7 +210,7 @@ const QuizDetails = ({ navigation, }) => {
                 ]}
                 onPress={alert}
               >
-                <Text style={styles.btnText}>Delete quiz</Text>
+                <Text allowFontScaling={false} style={styles.btnText}>Delete quiz</Text>
               </TouchableOpacity>
             </View>
           </View>

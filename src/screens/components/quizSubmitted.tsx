@@ -13,9 +13,9 @@ const QuizSubmitted = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <View style={styles.createQuizHeader}>
-                <Text style={styles.createQuizTxt}>Gemini Quiz</Text>
+                <Text allowFontScaling={false} style={styles.createQuizTxt}>Gemini Quiz</Text>
             </View>
-            <View style={styles.quizConatiner}>
+            <View style={styles.quizContainer}>
                 <View
                     style={{
                         alignItems: "center",
@@ -23,10 +23,10 @@ const QuizSubmitted = ({ navigation, route }) => {
                         height: "90%",
                     }}
                 >
-                    <Text style={styles.quizsaved}>Quiz Saved Successfully</Text>
-                    <View style={styles.startQuizCnt}>
+                    <Text allowFontScaling={false} style={styles.quizsaved}>Quiz Saved Successfully</Text>
+                    <View>
                         <TouchableOpacity style={styles.back} onPress={() => { clearquiz(); navigation.navigate("BasicDetails") }}>
-                            <Text style={styles.startQuizBtn}>Go to Create Quiz Screen</Text>
+                            <Text allowFontScaling={false} style={styles.startQuizBtn}>Go to Create Quiz Screen</Text>
                         </TouchableOpacity></View>
                 </View>
 
@@ -52,36 +52,22 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
     },
-    quizConatiner: {
+    quizContainer: {
         alignItems: "center",
     },
     back: {
-        backgroundColor: ""
-    },
-    startQuizCnt: {
-        alignSelf: "center",
-        backgroundColor: "transparent",
+        width: 240,
+        height: 50,
+        backgroundColor: "#9187E6",
         alignItems: "center",
-        marginTop: height / 85.4,
-        width: width,
+        justifyContent: "center",
+        borderRadius: 10,
+        marginTop: 15,
     },
     startQuizBtn: {
         color: "#FFFFFF",
-        borderColor: "#6A5AE1",
-        borderWidth: 1,
-        padding: 10,
-        paddingLeft: 20,
-        paddingRight: 20,
-        borderRadius: 8,
-        backgroundColor: "#6A5AE1",
-        elevation: 11,
-        shadowColor: "grey",
-        shadowOpacity: 0.84,
-        shadowOffset: { width: 4, height: 20 },
-        shadowRadius: 34,
-        textAlign: "center",
         fontFamily: "Montserrat-SemiBold",
-        justifyContent: "center",
+        fontSize: 14
     },
     quizsaved: {
         color: "#414254",
