@@ -14,11 +14,12 @@ import {
   Image,
   ScrollView,
   Platform,
-  Button,
+  Dimensions,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase/config";
+let { width, height } = Dimensions.get("window");
 const BasicDetailForm = ({ navigation }) => {
   const [isPickerShowFromDate, setIsPickerShowFromDate] = useState(false);
   const [isPickerShowToDate, setIsPickerShowToDate] = useState(false);
@@ -55,15 +56,19 @@ const BasicDetailForm = ({ navigation }) => {
   const showPickerToDate = () => {
     setIsPickerShowToDate(true);
   };
-
+  useEffect(() => {
+    console.log(quiz)
+  })
   const onChangeFromDate = (event: any, value: Date) => {
+
+    // console.log(moment())
     setQuiz({
       ...quiz,
       Basic_Details: {
         ...quiz.Basic_Details,
         TimePeriod: {
           ...quiz.Basic_Details.TimePeriod,
-          start: value.toString(),
+          start: event,
         },
       },
     });
@@ -78,7 +83,7 @@ const BasicDetailForm = ({ navigation }) => {
         ...quiz.Basic_Details,
         TimePeriod: {
           ...quiz.Basic_Details.TimePeriod,
-          end: value.toString(),
+          end: event,
         },
       },
     });
@@ -372,46 +377,36 @@ const BasicDetailForm = ({ navigation }) => {
                 {Platform.OS !== "ios" && <Text allowFontScaling={false} style={styles.content}>Enter Quiz Time Period</Text>}
                 {Platform.OS !== "ios" && (
                   <View>
-                    <View style={styles.pickedDateContainer}>
+                    {/* <View style={styles.pickedDateContainer}>
                       <Text allowFontScaling={false} style={styles.pickedDate}>
-                        {(new Date(quiz.Basic_Details.TimePeriod.start)).toDateString()}
+                        {quiz.Basic_Details.TimePeriod.start}
                       </Text>
-                    </View>
-                    {!isPickerShowFromDate && (
-                      <View style={styles.datebtnContainer}>
-                        <Button
-                          title="From Date"
-                          color="#9187E6"
-                          onPress={showPickerFromDate}
-                        />
-                      </View>
-                    )}
-                    {isPickerShowFromDate && (
-                      <DateTimePicker
-                        value={new Date(quiz.Basic_Details.TimePeriod.start)}
-                        mode={"date"}
-                        display={"default"}
-                        is24Hour={true}
-                        onChange={onChangeFromDate}
-                        style={styles.datePickerAndroid}
-                      />
-                    )}
-                    <View style={styles.pickedDateContainer}>
-                      <Text allowFontScaling={false} style={styles.pickedDate}>
-                        {(new Date(quiz.Basic_Details.TimePeriod.end)).toDateString()}
-                      </Text>
-                    </View>
-                    {!isPickerShowToDate && (
-                      <View style={styles.datebtnContainer}>
-                        <Button
-                          title="To Date"
-                          color="#9187E6"
-                          onPress={showPickerToDate}
-                        />
-                      </View>
-                    )}
+                    </View> */}
 
-                    {isPickerShowToDate && (
+                    <View style={styles.datebtnContainer}>
+                      <Text allowFontScaling={false} style={styles.pickedDate}>Start Date</Text>
+                    </View>
+                    {/* // <DateTimePicker
+                      //   value={new Date(quiz.Basic_Details.TimePeriod.start)}
+                      //   mode={"date"}
+                      //   display={"default"}
+                      //   is24Hour={true}
+                      //   onChange={onChangeFromDate}
+                      //   style={styles.datePickerAndroid}
+                      // /> */}
+
+                    <DatePickerCalendar date={quiz.Basic_Details.TimePeriod.start} onChange={onChangeFromDate} />
+                    {/* <View style={styles.pickedDateContainer}>
+                      <Text allowFontScaling={false} style={styles.pickedDate}>
+                        {(new Date(quiz.Basic_Details.TimePeriod.end)).toString()}
+                      </Text>
+                    </View> */}
+
+                    <View style={styles.datebtnContainer}>
+                      <Text allowFontScaling={false} style={styles.pickedDate}>End Date</Text>
+                    </View>
+
+                    {/* {isPickerShowToDate && (
                       <DateTimePicker
                         value={new Date(quiz.Basic_Details.TimePeriod.end)}
                         mode={"date"}
@@ -420,7 +415,15 @@ const BasicDetailForm = ({ navigation }) => {
                         onChange={onChangeToDate}
                         style={styles.datePickerAndroid}
                       />
-                    )}
+                    )} */}
+                    <DatePickerCalendar date={quiz.Basic_Details.TimePeriod.end} onChange={onChangeToDate} />
+                    {/* <Calendar
+                      onChange={onChangeToDate}
+                      selected={quiz.Basic_Details.TimePeriod.end}
+                      // We use Moment.js to give the minimum and maximum dates.
+                      minDate={moment().startOf('day')}
+                      maxDate={moment().add(10, 'years').startOf('day')}
+                    /> */}
                   </View>
                 )}
                 <Text allowFontScaling={false} style={styles.content}>Enter Quiz Duration</Text>
@@ -639,7 +642,7 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat",
   },
   datebtnContainer: {
-    padding: 10,
+    padding: 5,
   },
   datePickerIOS: {
     width: "40%",

@@ -33,7 +33,7 @@ const QuestionareForm = ({ navigation, route }) => {
     option3: "",
   });
   useEffect(() => {
-    console.log(question);
+    // console.log(question);
     setQuesAns({
       Ques: question.Ques,
       CorrectAns: question.CorrectAns,
