@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { createContext, useState } from "react";
 
 const QuizContext = createContext({});
@@ -5,14 +6,14 @@ const QuizContext = createContext({});
 const QuizState = ({ children }: any) => {
   const [quiz, setQuiz] = useState({
     Basic_Details: {
-      Id: Date.now().toString(),
+      Id: Math.floor(100000 + Math.random() * 900000),
       No_ofQuestions: 0,
       category: "",
       quizName: "",
       Time: 0,
       TimePeriod: {
-        start: new Date().toString(),
-        end: new Date().toString(),
+        start: moment(),
+        end: moment(),
       },
       pointsPerQuestion: 0,
       logoUrl: "",
@@ -59,14 +60,14 @@ const QuizState = ({ children }: any) => {
   const clearquiz = () => {
     setQuiz({
       Basic_Details: {
-        Id: "",
+        Id: 0,
         No_ofQuestions: 0,
         category: "",
         quizName: "",
         Time: 0,
         TimePeriod: {
-          start: new Date().toString(),
-          end: new Date().toString(),
+          start: moment(),
+          end: moment(),
         },
         pointsPerQuestion: 0,
         logoUrl: "",

@@ -10,25 +10,42 @@ import {
   Modal,
   Dimensions
 } from "react-native";
+import moment from "moment";
 import { QuizContext } from "../../context/QuizContextApi";
 import { db } from "../../firebase/config";
 import { FontAwesome } from "@expo/vector-icons";
 let { width, height } = Dimensions.get("window");
 import { collection, addDoc } from "firebase/firestore";
 const QuizDetails = ({ navigation, }) => {
-  const { quiz, clearquiz, deletequiz }: any = useContext(QuizContext);
+  const { quiz, clearquiz, deletequiz, setQuiz }: any = useContext(QuizContext);
   //console.log(quiz)
   const [showWarning, SetshowWarning] = useState(false);
   useEffect(() => {
-    console.log(quiz);
+    // console.log(quiz);
     console.log("------------");
   }, [navigation, quiz])
   const handleRemoveItem = async (id: Object) => {
     deletequiz(id);
   }
   const submitQuiz = async () => {
+    let newQuiz = quiz;
+    newQuiz["Basic_Details"].TimePeriod.start = moment(quiz.Basic_Details.TimePeriod.start).format("DD-MM-YYYY");
+    newQuiz["Basic_Details"].TimePeriod.end = moment(quiz.Basic_Details.TimePeriod.end).format("DD-MM-YYYY");
+    console.log("hello", quiz)
+    console.log("hi", newQuiz)
+    // setQuiz({
+    //   ...quiz,
+    //   Basic_Details: {
+    //     ...quiz.Basic_Details,
+    //     TimePeriod: {
+    //       start: moment(quiz.Basic_Details.TimePeriod.start).format("DD-MM-YYYY"),
+    //       end: moment(quiz.Basic_Details.TimePeriod.end).format("DD-MM-YYYY"),
+    //     },
+    //   }
+    // })
+    // console.log("hi", quiz)
     try {
-      await addDoc(collection(db, "QuizData"), quiz);
+      await addDoc(collection(db, "QuizData"), newQuiz);
     } catch (err) {
       console.log(err);
     }
@@ -91,13 +108,13 @@ const QuizDetails = ({ navigation, }) => {
               <View style={styles.basicDetailRow}>
                 <Text allowFontScaling={false} style={styles.basicDetailTitle}>Quiz From Date</Text>
                 <Text allowFontScaling={false} style={styles.basicDetailData}>
-                  {(new Date(quiz.Basic_Details.TimePeriod.start)).toDateString()}
+                  {(new Date(quiz.Basic_Details.TimePeriod.start)).toDateString().split(' ').slice(1).join(' ')}
                 </Text>
               </View>
               <View style={styles.basicDetailRow}>
                 <Text allowFontScaling={false} style={styles.basicDetailTitle}>Quiz To Date</Text>
                 <Text allowFontScaling={false} style={styles.basicDetailData}>
-                  {(new Date(quiz.Basic_Details.TimePeriod.end)).toDateString()}
+                  {(new Date(quiz.Basic_Details.TimePeriod.end)).toDateString().split(' ').slice(1).join(' ')}
                 </Text>
               </View>
               <View style={styles.basicDetailRow}>
