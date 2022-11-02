@@ -10,21 +10,6 @@ export const appdata = [
     navig: "Details",
     navig1: "Web",
     url: "https://contripoint.geminisolutions.com/#/login",
-
-    // Screenshots: [
-    //   {
-    //     id: "1",
-    //     image: require("../../assets/Contripoint1.png"),
-    //   },
-    //   {
-    //     id: "2",
-    //     image: require("../../assets/Contripoint2.png"),
-    //   },
-    //   {
-    //     id: "3",
-    //     image: require("../../assets/Contripoint3.png"),
-    //   },
-    // ],
   },
   {
     name: "Athena",
@@ -37,20 +22,6 @@ export const appdata = [
     navig: "Details",
     navig1: "Web",
     url: "https://athena.geminisolutions.com/",
-    // Screenshots: [
-    //   {
-    //     id: "1",
-    //     image: require("../../assets/Athena1.png"),
-    //   },
-    //   {
-    //     id: "2",
-    //     image: require("../../assets/Athena2.png"),
-    //   },
-    //   {
-    //     id: "3",
-    //     image: require("../../assets/Athena3.png"),
-    //   },
-    // ],
   },
   {
     name: "MIS",
@@ -63,20 +34,6 @@ export const appdata = [
     navig: "Details",
     navig1: "Web",
     url: "https://mis.geminisolutions.in/Account/Login",
-    // Screenshots: [
-    //   {
-    //     id: "1",
-    //     image: require("../../assets/MIS1.png"),
-    //   },
-    //   {
-    //     id: "2",
-    //     image: require("../../assets/MIS2.png"),
-    //   },
-    //   {
-    //     id: "3",
-    //     image: require("../../assets/MIS3.png"),
-    //   },
-    // ],
   },
   {
     name: "Grey HR",
@@ -89,20 +46,6 @@ export const appdata = [
     navig: "Details",
     navig1: "Web",
     url: "https://geminisolutions.greythr.com/",
-    // Screenshots: [
-    //   {
-    //     id: "1",
-    //     image: require("../../assets/Grey1.png"),
-    //   },
-    //   {
-    //     id: "2",
-    //     image: require("../../assets/Grey2.png"),
-    //   },
-    //   {
-    //     id: "3",
-    //     image: require("../../assets/Grey3.png"),
-    //   },
-    // ],
   },
 
   {
@@ -116,20 +59,6 @@ export const appdata = [
     navig: "Details",
     navig1: "Web",
     url: "https://wiki.geminisolutions.com",
-    // Screenshots: [
-    //   {
-    //     id: "1",
-    //     image: require("../../assets/GemWiki1.png"),
-    //   },
-    //   {
-    //     id: "2",
-    //     image: require("../../assets/GemWiki2.png"),
-    //   },
-    //   {
-    //     id: "3",
-    //     image: require("../../assets/GemWiki3.png"),
-    //   },
-    // ],
   },
   {
     name: "L&D Gemini",
@@ -142,20 +71,6 @@ export const appdata = [
     navig: "Details",
     navig1: "Web",
     url: "https://geminisolutions.talentlms.com/index",
-    // Screenshots: [
-    //   {
-    //     id: "1",
-    //     image: require("../../assets/LMS1.png"),
-    //   },
-    //   {
-    //     id: "2",
-    //     image: require("../../assets/LMS2.png"),
-    //   },
-    //   {
-    //     id: "3",
-    //     image: require("../../assets/LMS3.png"),
-    //   },
-    // ],
   },
   {
     name: "Service Desk",
@@ -168,20 +83,6 @@ export const appdata = [
     navig: "Details",
     navig1: "Web",
     url: "https://servicedesk.geminisolutions.in/index.php?",
-    // Screenshots: [
-    //   {
-    //     id: "1",
-    //     image: require("../../assets/Service1.png"),
-    //   },
-    //   {
-    //     id: "2",
-    //     image: require("../../assets/Service2.png"),
-    //   },
-    //   {
-    //     id: "3",
-    //     image: require("../../assets/Service3.png"),
-    //   },
-    // ],
   },
   {
     key: 8,

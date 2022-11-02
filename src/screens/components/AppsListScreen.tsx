@@ -11,24 +11,11 @@ import React from "react";
 const AppsListScreen = ({ route, navigation }) => {
   const { details } = route.params;
   return (
-    <View style={{ flex: 1, top: 20 }}>
-      <View
-        style={{
-          width: "100%",
-          height: 50,
-          top: 30,
-          marginBottom: 20,
-          alignSelf: "center",
-        }}
-      >
+    <View style={styles.pageContainer}>
+      <View style={styles.headerContainer}>
         <View style={styles.arrowImg}>
           <TouchableOpacity
-            style={{
-              width: 35,
-              height: 30,
-              alignContent: "center",
-              alignItems: "center",
-            }}
+            style={styles.backbtnContainer}
             onPress={() => navigation.navigate("Homescreen")}
           >
             <Image
@@ -37,16 +24,7 @@ const AppsListScreen = ({ route, navigation }) => {
             />
           </TouchableOpacity>
         </View>
-        <Text
-          style={{
-            alignSelf: "center",
-            bottom: "50%",
-            fontSize: 18,
-            fontFamily: "Montserrat-Bold",
-          }}
-        >
-          {details.title}
-        </Text>
+        <Text style={styles.headerTitleText}>{details.title}</Text>
       </View>
       <View>
         <FlatList
@@ -102,22 +80,9 @@ const AppsListScreen = ({ route, navigation }) => {
         onPress={() => {
           navigation.navigate(details.add);
         }}
-        style={{
-          borderWidth: 1,
-          borderColor: "rgba(0,0,0,0.2)",
-          alignItems: "center",
-          justifyContent: "center",
-          width: 60,
-          position: "absolute",
-          bottom: "5%",
-          right: "5%",
-          height: 60,
-          backgroundColor: "#38a3a5",
-          borderRadius: 100,
-        }}
+        style={styles.floatingBtnContainer}
       >
-        {/* <Icon name="plus" size={30} color="#01a699" /> */}
-        <Text style={{ fontSize: 30, color: "#fff" }}>+</Text>
+        <Text style={styles.floatingbtnText}>+</Text>
       </TouchableOpacity>
     </View>
   );
@@ -126,6 +91,26 @@ const AppsListScreen = ({ route, navigation }) => {
 export default AppsListScreen;
 
 const styles = StyleSheet.create({
+  pageContainer: { flex: 1, top: 20 },
+  headerContainer: {
+    width: "100%",
+    height: 50,
+    top: 30,
+    marginBottom: 20,
+    alignSelf: "center",
+  },
+  backbtnContainer: {
+    width: 35,
+    height: 30,
+    alignContent: "center",
+    alignItems: "center",
+  },
+  headerTitleText: {
+    alignSelf: "center",
+    bottom: "50%",
+    fontSize: 18,
+    fontFamily: "Montserrat-Bold",
+  },
   arrowImg: {
     width: 44,
     height: 20,
@@ -220,4 +205,18 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
   },
+  floatingBtnContainer: {
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.2)",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 60,
+    position: "absolute",
+    bottom: "5%",
+    right: "5%",
+    height: 60,
+    backgroundColor: "#38a3a5",
+    borderRadius: 100,
+  },
+  floatingbtnText: { fontSize: 30, color: "#fff" },
 });
